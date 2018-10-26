@@ -24,6 +24,7 @@
     "@types/lodash": "^4.14.117",
     "@types/node": "^10.3.2",
     "@types/signale": "^1.2.0",
+    "nodemon": "^1.18.4",
     "typescript": "^3.1.3"
   }
 }

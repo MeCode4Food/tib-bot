@@ -1,10 +1,18 @@
 # Getting Started
-Do these:
+Do these to run:
+
 
 ```
 > npm install
 > tsc
 > npm run start
+```
+
+OR if you are developing (auto refresh on .ts update)
+
+```
+> npm install
+> npm run dev
 ```
 
 and you're all done!
