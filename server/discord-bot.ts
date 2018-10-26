@@ -39,7 +39,7 @@ export class DiscordBot{
 
                 if(commandName === 'debug'){
                     console.log('list');
-                    console.log(message.guild.emojis);
+                    // console.log(message.guild.emojis);
                 }
                 
                 // check if collects has the command, if yes, execute it
@@ -83,6 +83,6 @@ export class DiscordBot{
                 this.commands.set(command.name, command)
             } 
         }
-        console.log('commandFiles', commandFiles);
+        console.log('commands', this.commands.entries());
     }
 }
