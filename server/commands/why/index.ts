@@ -1,18 +1,19 @@
-import { Message } from 'discord.js'
-import Command from '../_command'
-import { DiscordBot } from '../../discord-bot';
+import { Message, Emoji } from "discord.js";
+import Command from "../_command";
+import { DiscordBot } from "../../discord-bot";
 
-export default class WhyCommand extends Command{
+export default class WhyCommand extends Command {
 
-    constructor(){
-        let name = 'why'
-        let description = 'explains why we don\'t use Discord Commando Client'
-        super(name, description)
+    constructor() {
+        super();
+        this.name = "why";
+        this.description = "explains why we don't use Discord Commando Client";
     }
 
-    public execute(discordBot: DiscordBot, message: Message, args: string[]){
-        const reeEmoji = message.guild.emojis.find(e=>e.name==="REEE")
+    public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
+        const reeEmoji: Emoji = message.guild.emojis.find(e=>e.name==="REEE");
 
-        message.channel.send(`Stay away from Discord Commando ${reeEmoji ? reeEmoji.toString() + reeEmoji.toString() + reeEmoji.toString() : 'REEE'}`)
+        message.channel.send(`Stay away from Discord Commando ${reeEmoji ? reeEmoji.toString() +
+             reeEmoji.toString() + reeEmoji.toString() : "REEE"}`);
     }
 }

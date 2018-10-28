@@ -12,7 +12,7 @@ function loadEnvVariables(): void {
     signale.start(chalk.green("Loading environmental variables..."));
 
     try {
-        const env : object = require("dotenv-safe").config()
+        const env : object = require("dotenv-safe").config();
     } catch (error) {
         signale.fatal(error);
     }

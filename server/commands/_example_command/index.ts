@@ -1,16 +1,18 @@
-import { Message } from 'discord.js'
-import { DiscordBot } from '../../discord-bot'
-import Command from '../_command'
+import { Message } from "discord.js";
+import { DiscordBot } from "../../discord-bot";
+import Command from "../_command";
 
-export default class ExampleCommand extends Command{
+export default class ExampleCommand extends Command {
+    name: string;
+    description: string;
 
-    constructor(){
-        let name = 'example' // command name that comes after the prefix
-        let description = 'does something' // description of the example command
-        super(name, description)
+    constructor() {
+        super();
+        this.name = "example"; // command name that comes after the prefix
+        this.description = "does something"; // description of the example command
     }
 
-    public execute(discordBot: DiscordBot, message: Message, args: string[]){
-        message.channel.send('Example command executed!') // replace this with something you want to do
+    public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
+        message.channel.send("Example command executed!"); // replace this with something you want to do
     }
 }

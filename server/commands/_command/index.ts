@@ -1,20 +1,20 @@
-import { Message } from 'discord.js'
-import { DiscordBot } from '../../discord-bot';
+import { Message } from "discord.js";
+import { DiscordBot } from "../../discord-bot";
 
-export default class Command{
-    name: string
-    description: string
+export default class Command {
+    name: string;
+    description: string;
 
-    constructor(name: string, description: string){
-        this.name = name
-        this.description = description
+    constructor() {
+        this.name = "";
+        this.description= "";
     }
 
-    public execute(discordBot: DiscordBot, message: Message, args: string[]){
-        message.channel.send('Pls implement method LEL')
+    public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
+        message.channel.send("Pls implement method LEL");
     }
 
-    public debug(){
-        console.log("inside here!")
+    public debug(): void {
+        console.log("inside here!");
     }
 }
