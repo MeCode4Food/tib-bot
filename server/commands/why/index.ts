@@ -11,7 +11,7 @@ export default class WhyCommand extends Command {
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
-        const reeEmoji: Emoji = message.guild.emojis.find(e=>e.name==="REEE");
+        const reeEmoji: Emoji = message.guild.emojis.find((e) => e.name === "REEE");
 
         message.channel.send(`Stay away from Discord Commando ${reeEmoji ? reeEmoji.toString() +
              reeEmoji.toString() + reeEmoji.toString() : "REEE"}`);

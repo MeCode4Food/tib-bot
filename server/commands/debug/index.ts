@@ -12,12 +12,12 @@ export default class BetaWaitCommand extends Command {
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
         const pickEmoji: string = "⛏️";
-        const feelsBadManEmoji: Emoji = message.guild.emojis.find(e => e.name === "FeelsBadMan");
+        const feelsBadManEmoji: Emoji = message.guild.emojis.find((e) => e.name === "FeelsBadMan");
 
-        if(feelsBadManEmoji) {
-            let emojiCouplet: string = pickEmoji + feelsBadManEmoji;
+        if (feelsBadManEmoji) {
+            const emojiCouplet: string = pickEmoji + feelsBadManEmoji;
             // tslint:disable-next-line:max-line-length
-            let messageToSend: string = `${emojiCouplet} HOW ${emojiCouplet} LONG  ${emojiCouplet} CAN ${emojiCouplet} THIS ${emojiCouplet} GO ${emojiCouplet} ON ${emojiCouplet} `;
+            const messageToSend: string = `${emojiCouplet} HOW ${emojiCouplet} LONG  ${emojiCouplet} CAN ${emojiCouplet} THIS ${emojiCouplet} GO ${emojiCouplet} ON ${emojiCouplet} `;
             message.channel.send(messageToSend);
         }
     }

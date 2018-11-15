@@ -2,12 +2,12 @@ import { Message } from "discord.js";
 import { DiscordBot } from "../../discord-bot";
 
 export default class Command {
-    name: string;
-    description: string;
+    public name: string;
+    public description: string;
 
     constructor() {
         this.name = "";
-        this.description= "";
+        this.description = "";
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {

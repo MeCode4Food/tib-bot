@@ -3,8 +3,8 @@ import { DiscordBot } from "../../discord-bot";
 import Command from "../_command";
 
 export default class ExampleCommand extends Command {
-    name: string;
-    description: string;
+    public name: string;
+    public description: string;
 
     constructor() {
         super();
@@ -12,7 +12,8 @@ export default class ExampleCommand extends Command {
         this.description = "does something"; // description of the example command
     }
 
-    public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
+    public execute(discordBot: DiscordBot
+        ,          message: Message, args: string[]): void {
         message.channel.send("Example command executed!"); // replace this with something you want to do
     }
 }
