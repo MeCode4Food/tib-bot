@@ -12,8 +12,7 @@ export default class ExampleCommand extends Command {
         this.description = "does something"; // description of the example command
     }
 
-    public execute(discordBot: DiscordBot
-        ,          message: Message, args: string[]): void {
+    public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
         message.channel.send("Example command executed!"); // replace this with something you want to do
     }
 }

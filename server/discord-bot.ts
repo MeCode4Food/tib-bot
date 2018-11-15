@@ -2,34 +2,35 @@ import Discord, { TextChannel } from "discord.js";
 import { Message } from "discord.js";
 import Command from "./commands/_command";
 import chalk from "chalk";
-import signale from "signale";
+import SIGNALE from "signale";
 import * as _ from "lodash";
 import fs from "fs";
 
 export class DiscordBot {
     private client = new Discord.Client();
     private commands = new Discord.Collection();
+    private token = "";
     private commandList = [];
     private readonly prefix = process.env.COMMAND_PREFIX;
 
     constructor() {
         try {
-            console.log(process.env.COMMAND_PREFIX);
             this.initListeners();
             this.initENV();
             this.initCommands();
         } catch (error) {
-            signale.error(error);
+            SIGNALE.error(error);
         }
     }
 
     public start(token: string): void {
+        this.token = token;
         this.client.login(token);
     }
 
     private initListeners(): void {
         this.client.on("ready", () => {
-            signale.success(chalk.green("Logged in!"));
+            SIGNALE.success(chalk.green("Logged in!"));
             this.client.user.setActivity("Artifact Waiting Room");
         });
 
@@ -61,7 +62,10 @@ export class DiscordBot {
         });
 
         this.client.on("error", (error) => {
-            throw error;
+            SIGNALE.error(error.message);
+            if (error.message === "read ECONNRESET") {
+                this.start(this.token);
+            }
         });
     }
 
@@ -85,6 +89,6 @@ export class DiscordBot {
                 this.commands.set(command.name, command);
             }
         }
-        console.log("commands", this.commands.entries());
+        // console.log("commands", this.commands.entries());
     }
 }

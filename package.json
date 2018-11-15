@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "chalk": "^2.4.1",
     "discord.js": "^11.4.2",
     "dotenv-safe": "^6.1.0",
