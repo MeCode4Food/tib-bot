@@ -31,7 +31,7 @@ export default class CardCommand extends Command {
 
             if (response.rarity) { embed.addField("Rarity", response.rarity); }
             if (response.attack) { embed.addField("Attack", response.attack, true); }
-            if (response.armor) { embed.addField("Armor", response.armour, true); }
+            if (response.armour) { embed.addField("Armor", response.armour, true); }
             if (response.hit_points) { embed.addField("Hit Points", response.hit_points, true); }
             if (response.mana_cost) { embed.addField("Mana Cost", response.mana_cost, true); }
             if (response.card_text) { embed.addField("Card Text", response.card_text); }
