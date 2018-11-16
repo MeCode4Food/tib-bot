@@ -5,6 +5,7 @@ export default class Card {
   public card_type: string;
   public card_text: string;
   public card_image: string;
+  public colour: string;
   public rarity: string;
   public signature_id: number;
   public parent_id: number;
@@ -29,6 +30,7 @@ export default class Card {
     this.card_type   = object.card_type;
     this.card_text   = object.card_text;
     this.card_image  = object.card_image;
+    this.colour  = object.colour;
     this.rarity = object.rarity;
 
     // card relations

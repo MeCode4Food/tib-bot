@@ -21,9 +21,9 @@ export function getDBUrl(cardQuery: string): string {
   return dbUrl;
 }
 
-export function generateEmbedFromCard(card: any): RichEmbed {
+export function generateEmbedFromCard(card: Card): RichEmbed {
   const embed: RichEmbed = new RichEmbed()
-                .setColor(4868682)
+                .setColor(getHexFromColour(card.colour))
                 .addField("Card Name", card.card_name, true)
                 .addField("Card Type", card.card_type, true);
 
@@ -42,4 +42,9 @@ export function generateEmbedFromCard(card: any): RichEmbed {
   if (card.card_image) { embed.setThumbnail(card.card_image); }
 
   return embed;
+}
+
+export function getHexFromColour(colourString: string): number {
+  const colourMap: any = { none: 0xffffff, blue: 0x2f7492, red: 0xc2352d , green: 0x479036 , black: 0x736e80 };
+  return colourMap[colourString];
 }
