@@ -1,4 +1,4 @@
-import { Message, RichEmbed } from "discord.js";
+import { Message, RichEmbed, TextChannel } from "discord.js";
 import { DiscordBot } from "../../discord-bot";
 import { getDBUrl, generateEmbedFromCard, getCardfromUrl } from "./helper";
 import Command from "../_command";
@@ -16,23 +16,30 @@ export default class CardCommand extends Command {
     }
 
     public async execute(discordBot: DiscordBot, message: Message, args: string[]): Promise<void> {
-        const cardQuery = args.join(" ");
+        try {
+            const cardQuery = args.join(" ");
+            if (cardQuery === "") {
+                message.channel.send(`Please enter a valid input. e.g. ${process.env.COMMAND_PREFIX}${this.name} Axe`);
+                return;
+            }
 
-        // construct db url from card query
-        const dbUrl = getDBUrl(cardQuery);
+            // construct db url from card query
+            const dbUrl = getDBUrl(cardQuery);
 
-        // obtain results from db
-        const cardResult: Card = await getCardfromUrl(dbUrl);
+            // obtain results from db
+            const cardResult: Card | null = await getCardfromUrl(dbUrl);
 
-        // if response is empty, return error
-        if (cardResult.card_id) {
-            message.channel.send(`Card '${cardQuery}' not found`);
-        } else {
+            // if response is empty, return error
+            if (!cardResult) {
+                message.channel.send(`No results found for card '${cardQuery}'`);
+            } else {
+                // using the card response, generate the embed
+                const embed = generateEmbedFromCard(cardResult);
 
-            // using the card response, generate the embed
-            const embed = generateEmbedFromCard(cardResult);
-
-            message.channel.send(embed);
+                message.channel.send(embed);
+            }
+        } catch (error) {
+            throw error;
         }
     }
 }
