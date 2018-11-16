@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2 delete card-repo; tsc; pm2 start ./index.js --name card-repo",
+    "start": "pm2 delete tib-bot; tsc; pm2 start ./index.js --name tib-bot",
     "compile": "tsc && node index.js",
     "dev": "nodemon -e ts  --exec \"npm run compile\""
   },
