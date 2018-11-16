@@ -25,7 +25,7 @@ export default class CardCommand extends Command {
         const cardResult: Card = await getCardfromUrl(dbUrl);
 
         // if response is empty, return error
-        if (_.isEmpty(cardResult)) {
+        if (cardResult.card_id) {
             message.channel.send(`Card '${cardQuery}' not found`);
         } else {
 
