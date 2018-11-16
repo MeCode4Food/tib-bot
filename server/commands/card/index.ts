@@ -3,6 +3,7 @@ import { DiscordBot } from "../../discord-bot";
 import { getDBUrl, generateEmbedFromCard, getCardfromUrl } from "./helper";
 import Command from "../_command";
 import _ from "lodash";
+import Card from "../../helper/models/card";
 
 export default class CardCommand extends Command {
     public name: string;
@@ -21,15 +22,15 @@ export default class CardCommand extends Command {
         const dbUrl = getDBUrl(cardQuery);
 
         // obtain results from db
-        const response: any = getCardfromUrl(dbUrl);
+        const cardResult: Card = await getCardfromUrl(dbUrl);
 
         // if response is empty, return error
-        if (_.isEmpty(response)) {
+        if (_.isEmpty(cardResult)) {
             message.channel.send(`Card '${cardQuery}' not found`);
         } else {
 
             // using the card response, generate the embed
-            const embed = generateEmbedFromCard(response);
+            const embed = generateEmbedFromCard(cardResult);
 
             message.channel.send(embed);
         }

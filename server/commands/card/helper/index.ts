@@ -1,8 +1,15 @@
 import { RichEmbed } from "discord.js";
 import axios from "axios";
+import Card from "../../../helper/models/card";
 
-export async function getCardfromUrl(dbUrl: string): Promise<any> {
-  return (await axios.get(dbUrl)).data.data;
+export async function getCardfromUrl(dbUrl: string): Promise<Card> {
+  try {
+    const response: any = (await axios.get(dbUrl)).data.data;
+    const card: Card = new Card(response);
+    return card;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export function getDBUrl(cardQuery: string): string {
@@ -27,7 +34,7 @@ export function generateEmbedFromCard(card: any): RichEmbed {
   // if (card.armour) { embed.addField("Armor", card.armour, true); }
   // if (card.hit_points) { embed.addField("Health", card.hit_points, true); }
   if (card.mana_cost) { embed.addField("Mana Cost", card.mana_cost, true); }
-  if (card.card_text) { embed.addField("Card Text", card.card_text); }
+  if (card.card_text && card.card_type !== "Hero") { embed.addField("Card Text", card.card_text); }
   if (card.signature_name) { embed.addField("Signature Card", card.signature_name); }
   if (card.passive_name) { embed.addField("Passive Ability", `**${card.passive_name}**: ${card.passive_text}`); }
   if (card.parent_type === "Hero") { embed.addField("Signature Card for ", `${card.parent_name}`, true); }
