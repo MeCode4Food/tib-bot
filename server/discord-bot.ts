@@ -35,10 +35,10 @@ export class DiscordBot {
         });
 
         this.client.on("message", (message: Message) => {
+            // Log messages
             console.log(chalk.green(message.author.username) + ":"
              + chalk.cyan((message.channel as TextChannel).name) + ">" + chalk.blue(message.toString()));
 
-            // command and args are based in !<command> <args[0]> <args[1]>  <args[2]> ...
             if (message.content.startsWith(this.prefix!)) {
 
                 const args: string[] = message.content.slice(this.prefix!.length).split(/ +/);
@@ -77,15 +77,22 @@ export class DiscordBot {
     }
 
     private initCommands(): void {
-
         // read all folders inside ./server/commands
-        const commandFiles: string[] = fs.readdirSync("./server/commands");
+        const directory = "./server/commands";
+
+        this.loadCommandsFromDirectory(directory);
+    }
+
+    private loadCommandsFromDirectory(directory: string) {
+        const commandFiles: string[] = fs.readdirSync(directory);
 
         // loop through all of them and add them to this.commands as part of a collection
         for (const file of commandFiles) {
             if (!file.startsWith("_")) {
                 const commandClass: any = require(`./commands/${file}`).default;
                 const command: any = new commandClass();
+
+                /*ts-lint:disable */
                 this.commands.set(command.name, command);
             }
         }
