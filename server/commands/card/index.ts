@@ -35,14 +35,14 @@ export default class CardCommand extends Command {
 
             // if response is empty, return error
             if (!testResult) {
+                message.channel.send(`Result not found for card '${cardQuery}'`); // this means time out
+            } else if (!cardResult) {
                 message.channel.send(`No results found for card '${cardQuery}'`);
-            } else if (cardResult) {
+            } else {
                 // using the card response, generate the embed
                 const embed = generateEmbedFromCard(cardResult);
 
                 message.channel.send(embed);
-            } else {
-                message.channel.send(`No results found for card '${cardQuery}'`);
             }
         } catch (error) {
             throw error;
