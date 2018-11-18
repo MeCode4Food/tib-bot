@@ -1,6 +1,8 @@
 import { Message } from "discord.js";
 import { DiscordBot } from "../../discord-bot";
 import Command from "../_command";
+import { generateGuildEmbed } from "./helper/generate_embed";
+import SIGNALE = require("signale");
 
 export default class ServerInfoCommand extends Command {
     public name: string;
@@ -13,7 +15,12 @@ export default class ServerInfoCommand extends Command {
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
-        
-        message.channel.send("Example command executed!"); // replace this with something you want to do
+        try {
+            const embed = generateGuildEmbed(message.guild);
+            // console.log("ID", (discordBot as any).client.guilds);
+            message.channel.send(embed); // replace this with something you want to do
+        } catch (error) {
+            SIGNALE.error(error);
+        }
     }
 }
