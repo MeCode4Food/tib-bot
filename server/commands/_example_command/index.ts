@@ -13,6 +13,10 @@ export default class ExampleCommand extends Command {
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
-        message.channel.send("Example command executed!"); // replace this with something you want to do
+        try {
+            message.channel.send("Example command executed!"); // replace this with something you want to do
+        } catch (error) {
+            throw error;
+        }
     }
 }

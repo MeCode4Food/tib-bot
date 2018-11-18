@@ -1,9 +1,12 @@
-import { Message, RichEmbed, TextChannel } from "discord.js";
+import { Message } from "discord.js";
 import { DiscordBot } from "../../discord-bot";
-import { getDBUrl, generateEmbedFromCard, getCardfromUrl } from "./helper";
+import { pingCardRepo } from "./helper/ping_card_repo";
 import Command from "../_command";
 import _ from "lodash";
 import Card from "../../helper/models/card";
+import { getCardfromUrl } from "./helper/get_card_from_url";
+import { generateEmbedFromCard } from "./helper/generate_embed_from_card";
+import { getDBUrl } from "./helper/get_db_url";
 
 export default class CardCommand extends Command {
     public name: string;
@@ -27,10 +30,13 @@ export default class CardCommand extends Command {
             const dbUrl = getDBUrl(cardQuery);
 
             // obtain results from db
+            const testResult: boolean = await pingCardRepo();
             const cardResult: Card | null = await getCardfromUrl(dbUrl);
 
             // if response is empty, return error
-            if (!cardResult) {
+            if (!testResult) {
+                message.channel.send(`Result not found for card '${cardQuery}'`); // this means time out
+            } else if (!cardResult) {
                 message.channel.send(`No results found for card '${cardQuery}'`);
             } else {
                 // using the card response, generate the embed

@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pm2 delete tib-bot; tsc; pm2 start ./index.js --name tib-bot",
-    "compile": "tsc && node index.js",
-    "dev": "nodemon -e ts  --exec \"npm run compile\""
+    "compile_start": "tsc && node index.js",
+    "compile": "tsc",
+    "dev": "nodemon -e ts  --exec \"npm run compile_start\""
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +28,6 @@
     "@types/signale": "^1.2.0",
     "nodemon": "^1.18.4",
     "tslint": "^5.11.0",
-    "typescript": "^3.1.3"
+    "typescript": "^3.1.6"
   }
 }
