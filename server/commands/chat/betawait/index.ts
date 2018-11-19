@@ -8,6 +8,8 @@ export default class BetaWaitCommand extends ChatCommand {
         super();
         this.name = "betawait"; // command name that comes after the prefix
         this.description = "Personal impressions on Artifact's beta wait"; // description of the example command
+        this.hidden = false;
+        this.commandGroup = "chat";
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
