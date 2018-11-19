@@ -1,6 +1,6 @@
 import { RichEmbed } from "discord.js";
 import { getHexFromColour } from "./get_hex_from_colour";
-import Card from "../../../helper/models/card";
+import Card from "../../../../helper/models/card";
 
 export function generateEmbedFromCard(card: Card): RichEmbed {
     const embed: RichEmbed = new RichEmbed()

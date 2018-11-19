@@ -1,8 +1,8 @@
 import { Message } from "discord.js";
 import { DiscordBot } from "../../discord-bot";
-import Command from "../_command";
+import { ArtifactCommand } from "../_command";
 
-export default class ExampleCommand extends Command {
+export default class ExampleCommand extends ArtifactCommand {
     public name: string;
     public description: string;
 
@@ -10,6 +10,8 @@ export default class ExampleCommand extends Command {
         super();
         this.name = "example"; // command name that comes after the prefix
         this.description = "does something"; // description of the example command
+        this.hidden = false;
+        this.commandGroup = "";
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {

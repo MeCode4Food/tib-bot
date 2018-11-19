@@ -1,13 +1,13 @@
 import { Message } from "discord.js";
-import { DiscordBot } from "../../discord-bot";
-import Command from "../_command";
+import { ChatCommand } from "../../_command";
+import { DiscordBot } from "../../../discord-bot";
 
-export default class EchoCommand extends Command {
+export default class EchoCommand extends ChatCommand {
 
     constructor() {
         super();
         this.name = "echo";
-        this.description = "echoes the message by the sender";
+        this.description = "Echoes the message by the sender";
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {

@@ -1,5 +1,4 @@
 import { RichEmbed, Guild } from "discord.js";
-import Card from "../../../helper/models/card";
 
 export function generateGuildEmbed(guild: Guild): RichEmbed {
     const embed: RichEmbed = new RichEmbed()
