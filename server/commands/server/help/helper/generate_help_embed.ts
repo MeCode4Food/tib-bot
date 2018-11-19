@@ -17,19 +17,19 @@ export function generateHelpEmbed(discordBot: DiscordBot): RichEmbed {
     const serverCommandList: ServerCommand[] = [];
     const serverCommand = new ServerCommand();
 
-    commandList.forEach((commandArray) => {
+    commandList.forEach((command) => {
 
         // hide hidden commands and sort them into types based on ICommand.commandGroup
-        if (!commandArray.hidden) {
-            switch ((commandArray as ICommand).commandGroup ) {
+        if (!command.hidden) {
+            switch ((command as ICommand).commandGroup ) {
                 case artifactCommand.commandGroup:
-                    artifactCommandList.push(commandArray);
+                    artifactCommandList.push(command);
                     break;
                 case chatCommand.commandGroup:
-                    chatCommandList.push(commandArray);
+                    chatCommandList.push(command);
                     break;
                 case serverCommand.commandGroup:
-                    serverCommandList.push(commandArray);
+                    serverCommandList.push(command);
                     break;
             }
         }
