@@ -6,7 +6,7 @@ import signale from "signale";
 loadEnvVariables();
 
 const client: DiscordBot = new DiscordBot();
-client.start(process.env.API_KEY || "");
+client.start(process.env.DISCORD_TOKEN || "");
 
 function loadEnvVariables(): void {
     signale.start(chalk.green("Loading environmental variables..."));

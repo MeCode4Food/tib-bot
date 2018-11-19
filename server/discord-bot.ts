@@ -19,6 +19,7 @@ export class DiscordBot {
             this.initCommands();
         } catch (error) {
             SIGNALE.error(error);
+            throw error;
         }
     }
 
