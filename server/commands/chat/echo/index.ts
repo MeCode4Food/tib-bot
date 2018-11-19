@@ -7,7 +7,7 @@ export default class EchoCommand extends ChatCommand {
     constructor() {
         super();
         this.name = "echo";
-        this.description = "Echoes the message by the sender";
+        this.description = `Echoes the message by the sender *e.g. ${process.env.COMMAND_PREFIX}${this.name} I love you!* `;
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
