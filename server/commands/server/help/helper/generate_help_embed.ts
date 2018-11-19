@@ -41,7 +41,7 @@ export function generateHelpEmbed(discordBot: DiscordBot): RichEmbed {
             fieldContent += `**${command.name}** - ${command.description}`;
             fieldContent += index === artifactCommandList.length - 1 ? "" : "\n";
         });
-        embed.addField(`Artifact Commands`, fieldContent);
+        embed.addField(`${artifactCommand.commandIconString} Artifact Commands`, fieldContent);
     }
 
     if (chatCommandList.length !== 0) {
@@ -50,7 +50,7 @@ export function generateHelpEmbed(discordBot: DiscordBot): RichEmbed {
             fieldContent += `**${command.name}** - ${command.description}`;
             fieldContent += index === chatCommandList.length - 1 ? "" : "\n";
         });
-        embed.addField(`Chat Commands`, fieldContent);
+        embed.addField(`${chatCommand.commandIconString} Chat Commands`, fieldContent);
     }
 
     if (serverCommandList.length !== 0) {
@@ -59,7 +59,7 @@ export function generateHelpEmbed(discordBot: DiscordBot): RichEmbed {
             fieldContent += `**${command.name}** - ${command.description}`;
             fieldContent += index === serverCommandList.length - 1 ? "" : "\n";
         });
-        embed.addField(`Server Commands`, fieldContent);
+        embed.addField(`${serverCommand.commandIconString} Server Commands`, fieldContent);
     }
 
     return embed;
