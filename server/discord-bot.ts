@@ -98,6 +98,6 @@ export class DiscordBot {
                 }
             }
         }
-        console.log("commands", this.commands.entries());
+        // console.log("commands", this.commands.entries());
     }
 }

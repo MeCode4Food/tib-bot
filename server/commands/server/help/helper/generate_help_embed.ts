@@ -17,8 +17,6 @@ export function generateHelpEmbed(discordBot: DiscordBot): RichEmbed {
     const serverCommandList: ServerCommand[] = [];
     const serverCommand = new ServerCommand();
 
-    console.log(commandList);
-
     commandList.forEach((commandArray) => {
 
         // hide hidden commands and sort them into types based on ICommand.commandGroup
