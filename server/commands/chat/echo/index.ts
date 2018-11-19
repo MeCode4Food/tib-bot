@@ -11,7 +11,7 @@ export default class EchoCommand extends ChatCommand {
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
-        const reducer = (accumulator: string, currentValue: string) => accumulator + currentValue;
+        const reducer = (accumulator: string, currentValue: string) => accumulator + " " + currentValue;
         const messageContent = args.reduce(reducer);
         message.channel.send(messageContent);
     }
