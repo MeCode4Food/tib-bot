@@ -1,13 +1,14 @@
 import { Message, Emoji } from "discord.js";
-import Command from "../_command";
-import { DiscordBot } from "../../discord-bot";
+import { DiscordBot } from "../../../discord-bot";
+import { ICommand, ChatCommand } from "../../_command";
 
-export default class WhyCommand extends Command {
+export default class WhyCommand extends ChatCommand {
 
     constructor() {
         super();
         this.name = "why";
-        this.description = "explains why we don't use Discord Commando Client";
+        this.description = "Explains why we don't use Discord Commando Client";
+        this.hidden = true;
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {

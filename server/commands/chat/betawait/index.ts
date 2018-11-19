@@ -1,13 +1,13 @@
 import { Message, Emoji } from "discord.js";
-import { DiscordBot } from "../../discord-bot";
-import Command from "../_command";
+import { DiscordBot } from "../../../discord-bot";
+import { ChatCommand } from "../../_command";
 
-export default class DebugCommand extends Command {
+export default class BetaWaitCommand extends ChatCommand {
 
     constructor() {
         super();
-        this.name = "debug"; // command name that comes after the prefix
-        this.description = "debugs something"; // description of the example command
+        this.name = "betawait"; // command name that comes after the prefix
+        this.description = "Personal impressions on Artifact's beta wait"; // description of the example command
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {

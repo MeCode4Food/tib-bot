@@ -1,5 +1,5 @@
 import axios from "axios";
-import Card from "../../../helper/models/card";
+import Card from "../../../../helper/models/card";
 
 export async function getCardfromUrl(dbUrl: string): Promise<Card|null> {
   try {

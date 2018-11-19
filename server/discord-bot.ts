@@ -1,6 +1,6 @@
 import Discord, { TextChannel } from "discord.js";
 import { Message } from "discord.js";
-import Command from "./commands/_command";
+import { ICommand } from "./commands/_command";
 import chalk from "chalk";
 import SIGNALE from "signale";
 import * as _ from "lodash";
@@ -10,7 +10,6 @@ export class DiscordBot {
     private client = new Discord.Client();
     private commands = new Discord.Collection();
     private token = "";
-    private commandList = [];
     private readonly prefix = process.env.COMMAND_PREFIX;
 
     constructor() {
@@ -84,18 +83,21 @@ export class DiscordBot {
     }
 
     private loadCommandsFromDirectory(directory: string) {
-        const commandFiles: string[] = fs.readdirSync(directory);
+        const commandTypes: string[] = fs.readdirSync(directory);
 
         // loop through all of them and add them to this.commands as part of a collection
-        for (const file of commandFiles) {
-            if (!file.startsWith("_")) {
-                const commandClass: any = require(`./commands/${file}`).default;
-                const command: any = new commandClass();
+        for (const type of commandTypes) {
+            if (!type.startsWith("_")) {
+                const commandList: string[] = fs.readdirSync(`${directory}/${type}`);
+                for (const file of commandList) {
+                    const commandClass: any = require(`./commands/${type}/${file}`).default;
+                    const command: any = new commandClass();
 
-                /*ts-lint:disable */
-                this.commands.set(command.name, command);
+                    /*ts-lint:disable */
+                    this.commands.set(command.name, command);
+                }
             }
         }
-        // console.log("commands", this.commands.entries());
+        console.log("commands", this.commands.entries());
     }
 }

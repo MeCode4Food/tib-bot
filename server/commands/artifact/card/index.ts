@@ -1,21 +1,21 @@
 import { Message } from "discord.js";
-import { DiscordBot } from "../../discord-bot";
+import { DiscordBot } from "../../../discord-bot";
 import { pingCardRepo } from "./helper/ping_card_repo";
-import Command from "../_command";
-import _ from "lodash";
-import Card from "../../helper/models/card";
+import { ICommand, ArtifactCommand } from "../../_command";
 import { getCardfromUrl } from "./helper/get_card_from_url";
 import { generateEmbedFromCard } from "./helper/generate_embed_from_card";
 import { getDBUrl } from "./helper/get_db_url";
+import Card from "../../../helper/models/card";
+import _ from "lodash";
 
-export default class CardCommand extends Command {
+export default class CardCommand extends ArtifactCommand {
     public name: string;
     public description: string;
 
     constructor() {
         super();
         this.name = "card"; // command name that comes after the prefix
-        this.description = "search for cards"; // description of the example command
+        this.description = `Search for cards *e.g. ${process.env.COMMAND_PREFIX}${this.name} Axe*`; // description of the example command
     }
 
     public async execute(discordBot: DiscordBot, message: Message, args: string[]): Promise<void> {
