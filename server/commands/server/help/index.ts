@@ -18,7 +18,7 @@ export default class HelpCommand extends ServerCommand {
         // TODO loop through entries and create embed
         const embed = generateHelpEmbed(discordBot);
         
-        console.log((discordBot as any).commands.entries());
+        // console.log((discordBot as any).commands.entries());
         message.channel.send(embed); // replace this with something you want to do
     }
 }
