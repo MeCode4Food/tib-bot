@@ -2,11 +2,11 @@ import { Message, Emoji } from "discord.js";
 import { DiscordBot } from "../../../discord-bot";
 import { ICommand, ServerCommand } from "../../_command";
 
-export default class BetaWaitCommand extends ServerCommand {
+export default class DebugCommand extends ServerCommand {
 
     constructor() {
         super();
-        this.name = "betawait"; // command name that comes after the prefix
+        this.name = "debug"; // command name that comes after the prefix
         this.description = "Describes beta wait"; // description of the example command
         this.hidden = true;
     }
