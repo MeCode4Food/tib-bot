@@ -66,6 +66,8 @@ export class DiscordBot {
             console.error(error);
             if (error.message === "read ECONNRESET") {
                 this.start(this.token);
+            } else {
+                SIGNALE.info(`${chalk.red("ERROR MESSAGE")}: ${error.message}`);
             }
         });
     }
