@@ -63,6 +63,7 @@ export class DiscordBot {
 
         this.client.on("error", (error) => {
             SIGNALE.error(error.message);
+            console.error(error);
             if (error.message === "read ECONNRESET") {
                 this.start(this.token);
             }
