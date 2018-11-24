@@ -74,6 +74,16 @@ export class DiscordBot {
         if (_.isEmpty(this.prefix)) {
             throw new Error(`Please make sure .env is complete Prefix: ${this.prefix}`);
         }
+
+        if (process.env.ENV_MODE === "DEV") {
+            process.env.DB_API_URL = process.env.DEV_DB_API_URL;
+            process.env.DB_API_PORT = process.env.DEV_DB_API_PORT;
+        } else if (process.env.ENV_MODE === "PROD") {
+            process.env.DB_API_URL = process.env.PROD_DB_API_URL;
+            process.env.DB_API_PORT = process.env.PROD_DB_API_PORT;
+        } else {
+            throw new Error(`Please check your ENV_MODE`);
+        }
     }
 
     private initCommands(): void {

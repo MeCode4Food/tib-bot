@@ -32,6 +32,7 @@ export default class CardCommand extends ArtifactCommand {
             // obtain results from db
             const testResult: boolean = await pingCardRepo();
             const cardResult: Card | null = await getCardfromUrl(dbUrl);
+            console.log(cardResult);
 
             // if response is empty, return error
             if (!testResult) {
