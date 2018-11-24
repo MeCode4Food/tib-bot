@@ -19,8 +19,8 @@ export default class CardCommand extends ArtifactCommand {
     }
 
     public async execute(discordBot: DiscordBot, message: Message, args: string[]): Promise<void> {
+        const cardQuery = args.join(" ");
         try {
-            const cardQuery = args.join(" ");
             if (cardQuery === "") {
                 message.channel.send(`Please enter a valid input. e.g. ${process.env.COMMAND_PREFIX}${this.name} Axe`);
                 return;
@@ -30,22 +30,17 @@ export default class CardCommand extends ArtifactCommand {
             const dbUrl = getDBUrl(cardQuery);
 
             // obtain results from db
-            const testResult: boolean = await pingCardRepo();
             const cardResult: Card | null = await getCardfromUrl(dbUrl);
-            console.log(cardResult);
 
             // if response is empty, return error
-            if (!testResult) {
-                message.channel.send(`Result not found for card '${cardQuery}'`); // this means time out
-            } else if (!cardResult) {
-                message.channel.send(`No results found for card '${cardQuery}'`);
-            } else {
+            if (cardResult === null) { message.channel.send(`No results found for card '${cardQuery}'`); } else {
                 // using the card response, generate the embed
                 const embed = generateEmbedFromCard(cardResult);
 
                 message.channel.send(embed);
             }
         } catch (error) {
+            message.channel.send(`Error getting card '${cardQuery}'`);
             throw error;
         }
     }
