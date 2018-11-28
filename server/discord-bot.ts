@@ -31,7 +31,7 @@ export class DiscordBot {
     private initListeners(): void {
         this.client.on("ready", () => {
             SIGNALE.success(chalk.green("Logged in!"));
-            this.client.user.setActivity("Artifact Waiting Room");
+            this.client.user.setActivity("Artifact");
         });
 
         this.client.on("message", (message: Message) => {
@@ -108,10 +108,10 @@ export class DiscordBot {
                 const commandList: string[] = fs.readdirSync(`${directory}/${type}`);
                 for (const file of commandList) {
                     const commandClass: any = require(`./commands/${type}/${file}`).default;
-                    const command: any = new commandClass();
+                    const command: ICommand = new commandClass();
 
                     /*ts-lint:disable */
-                    this.commands.set(command.name, command);
+                    if (!command.disabled) { this.commands.set(command.name, command); }
                 }
             }
         }

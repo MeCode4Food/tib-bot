@@ -20,7 +20,7 @@ export function generateHelpEmbed(discordBot: DiscordBot): RichEmbed {
     commandList.forEach((command) => {
 
         // hide hidden commands and sort them into types based on ICommand.commandGroup
-        if (!command.hidden) {
+        if (!command.hidden || !command.disabled) {
             switch ((command as ICommand).commandGroup ) {
                 case artifactCommand.commandGroup:
                     artifactCommandList.push(command);
