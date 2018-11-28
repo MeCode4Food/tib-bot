@@ -10,6 +10,7 @@ export default class BetaWaitCommand extends ChatCommand {
         this.description = "Personal impressions on Artifact's beta wait"; // description of the example command
         this.hidden = false;
         this.commandGroup = "chat";
+        this.disabled = true;
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {

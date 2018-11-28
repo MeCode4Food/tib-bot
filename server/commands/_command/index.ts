@@ -7,6 +7,7 @@ export interface ICommand {
     hidden: boolean;
     commandGroup: string;
     commandIconString: string;
+    disabled: boolean;
 
     execute(discordBot: DiscordBot, message: Message, args: string[]): void;
 }
@@ -19,6 +20,7 @@ export class ArtifactCommand implements ICommand {
     public hidden: boolean;
     public commandGroup: string;
     public commandIconString: string;
+    public disabled: boolean;
 
     constructor() {
         this.name = "";
@@ -26,6 +28,7 @@ export class ArtifactCommand implements ICommand {
         this.hidden = false;
         this.commandGroup = "artifact";
         this.commandIconString = "<:artifact:513898212864688128>";
+        this.disabled = false;
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
@@ -40,6 +43,7 @@ export class ChatCommand implements ICommand {
     public hidden: boolean;
     public commandGroup: string;
     public commandIconString: string;
+    public disabled: boolean;
 
     constructor() {
         this.name = "";
@@ -47,6 +51,7 @@ export class ChatCommand implements ICommand {
         this.hidden = false;
         this.commandGroup = "chat";
         this.commandIconString = "<:FeelsGoodMan:513896739904946176>";
+        this.disabled = false;
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {
@@ -61,6 +66,7 @@ export class ServerCommand implements ICommand {
     public hidden: boolean;
     public commandGroup: string;
     public commandIconString: string;
+    public disabled: boolean;
 
     constructor() {
         this.name = "";
@@ -68,6 +74,7 @@ export class ServerCommand implements ICommand {
         this.hidden = false;
         this.commandGroup = "server";
         this.commandIconString = "🌐";
+        this.disabled = false;
     }
 
     public execute(discordBot: DiscordBot, message: Message, args: string[]): void {

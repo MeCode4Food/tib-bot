@@ -31,7 +31,7 @@ export class DiscordBot {
     private initListeners(): void {
         this.client.on("ready", () => {
             SIGNALE.success(chalk.green("Logged in!"));
-            this.client.user.setActivity("Artifact Waiting Room");
+            this.client.user.setActivity("Artifact");
         });
 
         this.client.on("message", (message: Message) => {
@@ -62,10 +62,15 @@ export class DiscordBot {
         });
 
         this.client.on("error", (error) => {
+            console.error("error message:");
             SIGNALE.error(error.message);
+            console.error("error object:");
             console.error(error);
+
             if (error.message === "read ECONNRESET") {
                 this.start(this.token);
+            } else {
+                SIGNALE.info(`${chalk.red("ERROR MESSAGE")}: ${error.message}`);
             }
         });
     }
@@ -74,6 +79,16 @@ export class DiscordBot {
     private initENV(): void {
         if (_.isEmpty(this.prefix)) {
             throw new Error(`Please make sure .env is complete Prefix: ${this.prefix}`);
+        }
+
+        if (process.env.ENV_MODE === "DEV") {
+            process.env.DB_API_URL = process.env.DEV_DB_API_URL;
+            process.env.DB_API_PORT = process.env.DEV_DB_API_PORT;
+        } else if (process.env.ENV_MODE === "PROD") {
+            process.env.DB_API_URL = process.env.PROD_DB_API_URL;
+            process.env.DB_API_PORT = process.env.PROD_DB_API_PORT;
+        } else {
+            throw new Error(`Please check your ENV_MODE`);
         }
     }
 
@@ -93,10 +108,10 @@ export class DiscordBot {
                 const commandList: string[] = fs.readdirSync(`${directory}/${type}`);
                 for (const file of commandList) {
                     const commandClass: any = require(`./commands/${type}/${file}`).default;
-                    const command: any = new commandClass();
+                    const command: ICommand = new commandClass();
 
                     /*ts-lint:disable */
-                    this.commands.set(command.name, command);
+                    if (!command.disabled) { this.commands.set(command.name, command); }
                 }
             }
         }
