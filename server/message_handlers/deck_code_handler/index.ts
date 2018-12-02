@@ -1,11 +1,17 @@
 import { Message } from "discord.js";
-import DeckCodeHandler from "./helper/deck_coder_handler";
+import DeckCodeHandler from "./helper/deck_code_handler";
+import { generateDeckEmbed } from "./helper/generate_deck_embed";
 
-export function handleDeckCodeMessage(message: Message) {
+export async function handleDeckCodeMessage(message: Message) {
   const unparsedDeckCode = message.content;
+  try {
+    if (DeckCodeHandler.verifyCheckSum(unparsedDeckCode)) {
+      const deckObject = (await DeckCodeHandler.requestDeckObject(unparsedDeckCode)).data.data;
+      const embed = generateDeckEmbed(deckObject);
 
-  if (DeckCodeHandler.verifyCheckSum(unparsedDeckCode)) {
-    const result = DeckCodeHandler.requestDeckObject(unparsedDeckCode);
-    message.channel.send(result);
+      message.channel.send(embed);
+    }
+  } catch (error) {
+    throw error;
   }
 }

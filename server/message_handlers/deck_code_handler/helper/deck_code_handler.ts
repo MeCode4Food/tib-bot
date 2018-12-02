@@ -14,8 +14,16 @@ export default class DeckCodeHandler {
     // Bufferize deckCode to convert to array
     Buffer.from(deckCode, "base64").map((e) => deckByteArray.push(e));
 
+    const version = deckByteArray[0] >> 4;
     const checkSum = deckByteArray[1];
-    const calcCheckSum = (deckByteArray.reduce((a, c) => a + c) - deckByteArray[0] - deckByteArray[1]) & 0xFF;
+    let stringLength = 0;
+    if (version > 1) { stringLength = deckByteArray[2]; }
+    const totalCardBytes = deckByteArray.length - stringLength;
+    // grab the string size
+
+    let calcCheckSum = 0;
+    for (let i = 3; i < totalCardBytes; i++) { calcCheckSum += deckByteArray[i]; }
+    calcCheckSum = (calcCheckSum & 0xFF);
 
     // comapre checksums
     return checkSum === calcCheckSum ? true : false;
