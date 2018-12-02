@@ -125,6 +125,7 @@ export class DiscordBot {
                 }
             }
         } else if (message.content.startsWith(this.deckCodePrefix!)) {
+            // decode deck code
             handleDeckCodeMessage(message);
         }
     }
