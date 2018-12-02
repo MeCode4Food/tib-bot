@@ -1,6 +1,7 @@
 import Discord, { TextChannel } from "discord.js";
 import { Message } from "discord.js";
 import { ICommand } from "./commands/_command";
+import { handleDeckCodeMessage } from "./message_handlers/deck_code_handler";
 import chalk from "chalk";
 import SIGNALE from "signale";
 import * as _ from "lodash";
@@ -11,6 +12,7 @@ export class DiscordBot {
     private commands = new Discord.Collection();
     private token = "";
     private readonly prefix = process.env.COMMAND_PREFIX;
+    private readonly deckCodePrefix = process.env.DECK_CODE_PREFIX;
 
     constructor() {
         try {
@@ -37,28 +39,10 @@ export class DiscordBot {
         this.client.on("message", (message: Message) => {
             // Log messages
             console.log(chalk.green(message.author.username) + ":"
-             + chalk.cyan((message.channel as TextChannel).name) + ">" + chalk.blue(message.toString()));
+            + chalk.cyan((message.channel as TextChannel).name) + ">" + chalk.blue(message.toString()));
 
-            if (message.content.startsWith(this.prefix!)) {
+            this.parseMessageHandleCommands(message);
 
-                const args: string[] = message.content.slice(this.prefix!.length).split(/ +/);
-                const commandName: string = args.shift()!.toLowerCase().replace(this.prefix!, "");
-
-                if (commandName === "debug") {
-                    console.log("list");
-                    // console.log(message.guild.emojis);
-                }
-
-                // check if collects has the command, if yes, execute it
-                if (this.commands.has(commandName)) {
-                    try {
-                        // ignore errors here by using cast 'as any'.
-                        (this.commands.get(commandName)! as any).execute(this as DiscordBot, message, args);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-            }
         });
 
         this.client.on("error", (error) => {
@@ -116,5 +100,32 @@ export class DiscordBot {
             }
         }
         // console.log("commands", this.commands.entries());
+    }
+
+    private parseMessageHandleCommands(message: Message) {
+
+        // check if message is a bot command
+        if (message.content.startsWith(this.prefix!)) {
+
+            const args: string[] = message.content.slice(this.prefix!.length).split(/ +/);
+            const commandName: string = args.shift()!.toLowerCase().replace(this.prefix!, "");
+
+            if (commandName === "debug") {
+                console.log("list");
+                // console.log(message.guild.emojis);
+            }
+
+            // check if collects has the command, if yes, execute it
+            if (this.commands.has(commandName)) {
+                try {
+                    // ignore errors here by using cast 'as any'.
+                    (this.commands.get(commandName)! as any).execute(this as DiscordBot, message, args);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        } else if (message.content.startsWith(this.deckCodePrefix!)) {
+            handleDeckCodeMessage(message);
+        }
     }
 }
