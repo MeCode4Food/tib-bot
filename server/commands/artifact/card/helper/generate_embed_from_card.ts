@@ -4,7 +4,7 @@ import Card from "../../../../helper/models/card";
 
 export function generateEmbedFromCard(card: Card): RichEmbed {
     const embed: RichEmbed = new RichEmbed()
-                .setColor(getHexFromColour(card.colour))
+                .setColor(card.card_type === "Item" ? getHexFromColour("yellow") : getHexFromColour(card.colour))
                 .addField("Card Name", card.card_name, true)
                 .addField("Card Type", card.card_type, true);
 
