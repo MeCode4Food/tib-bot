@@ -43,7 +43,7 @@ function generateCardsField(deck: any): string {
   // Track ×3
 
   _.forEach(cards, (card) => {
-    cardsOutput = cardsOutput + `${card.card_name} ×${card.count}\n`;
+    cardsOutput = cardsOutput + ` ${card.count}× ${card.card_name}\n`;
   });
   return cardsOutput;
 }
@@ -57,7 +57,7 @@ function generateItemsField(deck: any): string {
   // Track ×3
 
   _.forEach(items, (item) => {
-    itemsOutput = itemsOutput + `${item.card_name} ×${item.count}\n`;
+    itemsOutput = itemsOutput + `${item.count}× ${item.card_name}\n`;
   });
   return itemsOutput;
 }
