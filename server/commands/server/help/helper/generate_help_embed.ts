@@ -20,7 +20,7 @@ export function generateHelpEmbed(discordBot: DiscordBot): RichEmbed {
     commandList.forEach((command) => {
 
         // hide hidden commands and sort them into types based on ICommand.commandGroup
-        if (!command.hidden || !command.disabled) {
+        if (!(command.hidden || command.disabled)) {
             switch ((command as ICommand).commandGroup ) {
                 case artifactCommand.commandGroup:
                     artifactCommandList.push(command);
@@ -59,8 +59,12 @@ export function generateHelpEmbed(discordBot: DiscordBot): RichEmbed {
             fieldContent += `**${command.name}** - ${command.description}`;
             fieldContent += index === serverCommandList.length - 1 ? "" : "\n";
         });
+        fieldContent += "\n ‏‏‎"; // buffer
         embed.addField(`${serverCommand.commandIconString} Server Commands`, fieldContent);
     }
+
+    // add footer
+    embed.setFooter("Feeling like making the bot cooler? TinkerBot is looking for friends! Contact chick#7481 🐣 for more details.");
 
     return embed;
 }

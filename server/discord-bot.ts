@@ -1,11 +1,12 @@
 import Discord, { TextChannel } from "discord.js";
 import { Message } from "discord.js";
 import { ICommand } from "./commands/_command";
-import { handleDeckCodeMessage } from "./message_handlers/deck_code_handler";
+import { handleDeckCodeMessage } from "./message_preparsers/deck_code_handler";
 import chalk from "chalk";
 import SIGNALE from "signale";
 import * as _ from "lodash";
 import fs from "fs";
+import { isDeckCodeInMessage } from "./message_preparsers/deck_code_handler/helper/is_deck_code_in_message";
 
 export class DiscordBot {
     private client = new Discord.Client();
@@ -124,9 +125,9 @@ export class DiscordBot {
                     console.log(error);
                 }
             }
-        } else if (message.content.startsWith(this.deckCodePrefix!)) {
+        } else if (isDeckCodeInMessage(message)) {
             // decode deck code
-            handleDeckCodeMessage(message);
+            handleDeckCodeMessage(this.client, message);
         }
     }
 }
