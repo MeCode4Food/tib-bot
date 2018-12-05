@@ -18,6 +18,7 @@ export function generateDeckEmbed(client: Client, deck: Deck): RichEmbed {
   const cardsOutput = generateCardsField(deck, emojiObject);
 
   _.forEach(cardsOutput, (texts, index) => {
+    console.log(texts);
     embed.addField(`${index === 0 ? "Cards" : "‏ ‏‏‎‏‏‎"}`, texts, true);
   });
 
