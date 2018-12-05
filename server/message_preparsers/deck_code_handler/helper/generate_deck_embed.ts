@@ -37,7 +37,7 @@ function generateEmojiObject(client: Client): Map<string, Emoji> {
   emojiObject.set("red", artifactRed);
   emojiObject.set("green", artifactGreen);
   emojiObject.set("blue", artifactBlue);
-  emojiObject.set("rblacked", artifactBlack);
+  emojiObject.set("black", artifactBlack);
 
   return emojiObject;
 }
