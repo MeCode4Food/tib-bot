@@ -64,9 +64,7 @@ export function generateHelpEmbed(discordBot: DiscordBot): RichEmbed {
 
     // add footer
 
-    embed.setFooter(
-        "Feeling like contributing to the bot's development? TinkerBot is looking for friends! Contact chick#7481 for more details.",
-        "🐣");
+    embed.setFooter("Feeling like contributing to the bot's development? TinkerBot is looking for friends!  Contact chick#7481 🐣 for more details.");
 
     return embed;
 }
