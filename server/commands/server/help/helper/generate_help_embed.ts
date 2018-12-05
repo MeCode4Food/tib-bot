@@ -59,11 +59,11 @@ export function generateHelpEmbed(discordBot: DiscordBot): RichEmbed {
             fieldContent += `**${command.name}** - ${command.description}`;
             fieldContent += index === serverCommandList.length - 1 ? "" : "\n";
         });
+        fieldContent += "\n ‏‏‎"; // buffer
         embed.addField(`${serverCommand.commandIconString} Server Commands`, fieldContent);
     }
 
     // add footer
-
     embed.setFooter("Feeling like contributing to the bot's development? TinkerBot is looking for friends!  Contact chick#7481 🐣 for more details.");
 
     return embed;
