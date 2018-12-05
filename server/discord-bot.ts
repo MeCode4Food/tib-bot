@@ -127,7 +127,7 @@ export class DiscordBot {
             }
         } else if (isDeckCodeInMessage(message)) {
             // decode deck code
-            handleDeckCodeMessage(message);
+            handleDeckCodeMessage(this.client, message);
         }
     }
 }

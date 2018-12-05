@@ -1,54 +1,80 @@
-import { RichEmbed } from "discord.js";
+import { RichEmbed, Emoji, Client } from "discord.js";
 import Card from "../../../helper/models/card";
 import { getHexFromDeck } from "./get_hex_from_deck";
 import _ from "lodash";
+import { Deck } from "../../../helper/models/deck";
 
-export function generateDeckEmbed(deck: any): RichEmbed {
-
+export function generateDeckEmbed(client: Client, deck: Deck): RichEmbed {
   console.log(deck);
+
+  // reason why we use client here instead of discordbot ,is so that we can access other emojis that the bot has access to.
+  const emojiObject  = generateEmojiObject(client);
 
   const embed: RichEmbed = new RichEmbed()
               .setAuthor(`${deck.name}`)
               .setColor(getHexFromDeck(deck))
-              .addField("Heroes", generateHeroField(deck), false)
-              .addField("Cards", generateCardsField(deck), true);
+              .addField("Heroes", generateHeroField(deck, emojiObject), false)
+  
+              .addField("Cards", generateCardsField(deck, emojiObject), true);
 
-  if (deck.items) { embed.addField("Items", generateItemsField(deck), true); }
+  if (deck.items) { embed.addField("Items", generateItemsField(deck, emojiObject), true); }
   return embed;
 
 }
 
-function generateHeroField(deck: any): string {
+function generateEmojiObject(client: Client): Map<string, Emoji> {
+  const artifactRed: Emoji = client.emojis.find((e) => e.name === "artifactred");
+  const artifactGreen: Emoji = client.emojis.find((e) => e.name === "artifactgreen");
+  const artifactBlue: Emoji = client.emojis.find((e) => e.name === "artifactblue");
+  const artifactBlack: Emoji = client.emojis.find((e) => e.name === "artifactblack");
+
+  const emojiObject = new Map<string, Emoji>();
+
+  emojiObject.set("red", artifactRed);
+  emojiObject.set("green", artifactGreen);
+  emojiObject.set("blue", artifactBlue);
+  emojiObject.set("rblacked", artifactBlack);
+
+  return emojiObject;
+}
+
+function generateHeroField(deck: Deck, emojiObject: Map<string, Emoji>): string {
   const heroes = deck.heroes;
   let heroOutput = "";
 
-  // Turn 1: Zeus
-  // Turn 2: Axe
-  // Turn 3: Rubick
-  // Turn 4: Sand King
-  // Turn 5: Pugna
-
   _.forEach(heroes, (hero) => {
-    heroOutput = heroOutput + `Turn ${hero.turn}: **${hero.card_name}**\n`;
+    heroOutput = heroOutput + `Turn ${hero.turn}: ${emojiObject.get(hero.colour)} **${hero.card_name}**\n`;
   });
   return heroOutput;
 }
 
-function generateCardsField(deck: any): string {
+function generateCardsField(deck: Deck, emojiObject: Map<string, Emoji>): string[] {
   const cards = deck.cards;
-  let cardsOutput = "";
+  const limit = 1024;
+
+  let currentText = "";
+  const cardsOutput: string[] = [];
 
   // Iron Fog Goldmine ×1
   // Assassinate ×3
   // Track ×3
 
   _.forEach(cards, (card) => {
-    cardsOutput = cardsOutput + ` ${card.count}× ${card.card_name}\n`;
+    const lengthBefore = currentText.length;
+
+    const textToAdd = `${card.count}× ${emojiObject.get(card.colour)} **${card.mana_cost}** ${card.card_name}\n`;
+    if(lengthBefore + textToAdd.length > limit) {
+      cardsOutput.push(currentText);
+      currentText = textToAdd;
+    } else {
+      currentText += textToAdd;
+    }
   });
+  console.log(cardsOutput.length);
   return cardsOutput;
 }
 
-function generateItemsField(deck: any): string {
+function generateItemsField(deck: Deck, emojiObject: Map<string, Emoji>): string {
   const items = deck.items;
   let itemsOutput = "";
 
@@ -57,7 +83,7 @@ function generateItemsField(deck: any): string {
   // Track ×3
 
   _.forEach(items, (item) => {
-    itemsOutput = itemsOutput + `${item.count}× ${item.card_name}\n`;
+    itemsOutput = itemsOutput + `${item.count}× ${emojiObject.get(item.colour)} ${item.card_name}\n`;
   });
   return itemsOutput;
 }
