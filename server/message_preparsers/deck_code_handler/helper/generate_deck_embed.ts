@@ -5,7 +5,7 @@ import _ from "lodash";
 import { Deck } from "../../../helper/models/deck";
 
 export function generateDeckEmbed(client: Client, deck: Deck): RichEmbed {
-  console.log(deck);
+  // console.log(deck);
 
   // reason why we use client here instead of discordbot ,is so that we can access other emojis that the bot has access to.
   const emojiObject  = generateEmojiObject(client);
@@ -13,9 +13,13 @@ export function generateDeckEmbed(client: Client, deck: Deck): RichEmbed {
   const embed: RichEmbed = new RichEmbed()
               .setAuthor(`${deck.name}`)
               .setColor(getHexFromDeck(deck))
-              .addField("Heroes", generateHeroField(deck, emojiObject), false)
-  
-              .addField("Cards", generateCardsField(deck, emojiObject), true);
+              .addField("Heroes", generateHeroField(deck, emojiObject), false);
+
+  const cardsOutput = generateCardsField(deck, emojiObject);
+
+  _.forEach(cardsOutput, (texts, index) => {
+    embed.addField(`${index === 0 ? "Cards" : "‏ ‏‏‎‏‏‎"}`, texts, true);
+  });
 
   if (deck.items) { embed.addField("Items", generateItemsField(deck, emojiObject), true); }
   return embed;
@@ -52,6 +56,7 @@ function generateCardsField(deck: Deck, emojiObject: Map<string, Emoji>): string
   const cards = deck.cards;
   const limit = 1024;
 
+  let textToAdd;
   let currentText = "";
   const cardsOutput: string[] = [];
 
@@ -62,15 +67,19 @@ function generateCardsField(deck: Deck, emojiObject: Map<string, Emoji>): string
   _.forEach(cards, (card) => {
     const lengthBefore = currentText.length;
 
-    const textToAdd = `${card.count}× ${emojiObject.get(card.colour)} **${card.mana_cost}** ${card.card_name}\n`;
-    if(lengthBefore + textToAdd.length > limit) {
+    textToAdd = `${card.count}× ${emojiObject.get(card.colour)} **${card.mana_cost}** ${card.card_name}\n`;
+    if (lengthBefore + textToAdd.length > limit) {
       cardsOutput.push(currentText);
       currentText = textToAdd;
     } else {
       currentText += textToAdd;
     }
   });
-  console.log(cardsOutput.length);
+
+  if (textToAdd) { cardsOutput.push(textToAdd); }
+
+  console.log(cardsOutput);
+  console.log(cardsOutput.map((x) => x.length));
   return cardsOutput;
 }
 
@@ -83,7 +92,7 @@ function generateItemsField(deck: Deck, emojiObject: Map<string, Emoji>): string
   // Track ×3
 
   _.forEach(items, (item) => {
-    itemsOutput = itemsOutput + `${item.count}× ${emojiObject.get(item.colour)} ${item.card_name}\n`;
+    itemsOutput = itemsOutput + `${item.count}× ${item.card_name}\n`;
   });
   return itemsOutput;
 }
