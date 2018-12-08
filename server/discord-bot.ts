@@ -7,6 +7,7 @@ import SIGNALE from "signale";
 import * as _ from "lodash";
 import fs from "fs";
 import { isDeckCodeInMessage } from "./message_preparsers/deck_code_handler/helper/is_deck_code_in_message";
+import { handleOnError } from "./events/on_error";
 
 export class DiscordBot {
     private client = new Discord.Client();
@@ -47,20 +48,10 @@ export class DiscordBot {
         });
 
         this.client.on("error", (error) => {
-            console.error("error message:");
-            SIGNALE.error(error.message);
-            console.error("error object:");
-            console.error(error);
-
-            if (error.message === "read ECONNRESET") {
-                this.start(this.token);
-            } else {
-                SIGNALE.info(`${chalk.red("ERROR MESSAGE")}: ${error.message}`);
-            }
+            handleOnError(error, this, this.token);
         });
     }
 
-    // doesn't really initialize environmental variables
     private initENV(): void {
         if (_.isEmpty(this.prefix)) {
             throw new Error(`Please make sure .env is complete Prefix: ${this.prefix}`);
