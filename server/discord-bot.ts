@@ -44,17 +44,19 @@ export class DiscordBot {
             // need to change this event logic to not be so hard coded
             SIGNALE.info(`New User ${chalk.blue(member.displayName)} has joined guild ${member.guild}`);
 
-            const welcome = member.guild.channels.get(welcomeID);
-            const rules = member.guild.channels.get(rulesID);
-            const announcements = member.guild.channels.get(announcementsID);
-            const tourneyRules = member.guild.channels.get(tourneyRulesID);
+            if (process.env.ENV_MODE === "PROD") {
+                const welcome = member.guild.channels.get(welcomeID);
+                const rules = member.guild.channels.get(rulesID);
+                const announcements = member.guild.channels.get(announcementsID);
+                const tourneyRules = member.guild.channels.get(tourneyRulesID);
 
-            (member.guild.channels.get(this.newMembersChannel) as TextChannel).send(
-                `Welcome ${member.user}! Do check out ${welcome} channel for an introduction to the server.\n` +
-                `A reminder to follow the ${rules}, and do check out our ${announcements}!\n\n` +
-                `If you're here for the tournaments,\n` +
-                `Check out ${tourneyRules} or more information on our tourneys!`
-            );
+                (member.guild.channels.get(this.newMembersChannel) as TextChannel).send(
+                    `Welcome ${member.user}! Do check out ${welcome} channel for an introduction to the server.\n` +
+                    `A reminder to follow the ${rules}, and do check out our ${announcements}!\n\n` +
+                    `If you're here for the tournaments,\n` +
+                    `Check out ${tourneyRules} or more information on our tourneys!`
+                );
+            }
         });
 
         this.client.on("message", (message: Message) => {
@@ -106,7 +108,11 @@ export class DiscordBot {
     private initTimedScripts(): any {
         const hour = 1000 * 60 * 60;
         setInterval(() => {
-            console.log(`Count: ${this.client.guilds.get(TIBID)!.memberCount} Online: ${this.client.guilds.get(TIBID)!.members.find((m) => m.presence.status === "online")}`);
+            console.log(
+                `Count: ${this.client.guilds.get(TIBID)!.memberCount} ` +
+                `Online: ${this.client.guilds.get(TIBID)!.members.filter((m) => m.presence.status === "online").size} ` +
+                `In Game: ${this.client.guilds.get(TIBID)!.members.filter((m) => (m.presence.game || {}).name === "Artifact").size}`
+            );
         }, 5000);
     }
 
@@ -151,7 +157,7 @@ export class DiscordBot {
                     console.log(error);
                 }
             }
-        } else if (isDeckCodeInMessage(message)) {
+        } else if (isDeckCodeInMessage(message) && process.env.ENV_MODE === "PROD") {
             // decode deck code
             handleDeckCodeMessage(this.client, message);
         }
