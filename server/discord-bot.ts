@@ -39,16 +39,19 @@ export class DiscordBot {
         });
 
         this.client.on("guildMemberAdd", (member: GuildMember) => {
-            // need to change below to not be so hard coded
+            // need to change this event logic to not be so hard coded
             SIGNALE.info(`New User ${chalk.blue(member.displayName)} has joined guild ${member.guild}`);
 
             const welcome = member.guild.channels.get("517033870785511425");
             const rules = member.guild.channels.get("517061735639678977");
             const announcements = member.guild.channels.get("512661992255782913");
+            const tourneyRules = member.guild.channels.get("517062872056987668");
 
             (member.guild.channels.get(this.newMembersChannel) as TextChannel).send(
                 `Welcome ${member.user}! Do check out ${welcome} channel for an introduction to the server.\n` +
-                `A reminder to follow the ${rules}, and do check out our ${announcements}!`
+                `A reminder to follow the ${rules}, and do check out our ${announcements}!\n\n` +
+                `If you're here for the tournaments,\n` +
+                `Check out ${tourneyRules} or more information on our tourneys!`
             );
         });
 
