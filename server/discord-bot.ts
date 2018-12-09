@@ -1,4 +1,4 @@
-import Discord, { TextChannel } from "discord.js";
+import Discord, { TextChannel, GuildMember, Channel } from "discord.js";
 import { Message } from "discord.js";
 import { ICommand } from "./commands/_command";
 import { handleDeckCodeMessage } from "./message_preparsers/deck_code_handler";
@@ -14,6 +14,7 @@ export class DiscordBot {
     private token = "";
     private readonly prefix = process.env.COMMAND_PREFIX;
     private readonly deckCodePrefix = process.env.DECK_CODE_PREFIX;
+    private readonly newMembersChannel = "520417737063792661"; // only works for the tib server
 
     constructor() {
         try {
@@ -35,6 +36,20 @@ export class DiscordBot {
         this.client.on("ready", () => {
             SIGNALE.success(chalk.green("Logged in!"));
             this.client.user.setActivity("Artifact");
+        });
+
+        this.client.on("guildMemberAdd", (member: GuildMember) => {
+            // need to change below to not be so hard coded
+            SIGNALE.info(`New User ${chalk.blue(member.displayName)} has joined guild ${member.guild}`);
+
+            const welcome = member.guild.channels.get("517033870785511425");
+            const rules = member.guild.channels.get("517061735639678977");
+            const announcements = member.guild.channels.get("512661992255782913");
+
+            (member.guild.channels.get(this.newMembersChannel) as TextChannel).send(
+                `Welcome ${member.user}! Do check out ${welcome} channel for an introduction to the server.\n` +
+                `A reminder to follow the ${rules}, and do check out our ${announcements}!`
+            );
         });
 
         this.client.on("message", (message: Message) => {
