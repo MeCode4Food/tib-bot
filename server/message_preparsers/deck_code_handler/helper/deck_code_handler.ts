@@ -23,24 +23,25 @@ export default class DeckCodeHandler {
     console.log(JSON.stringify(deckByteArray));
     console.log(JSON.stringify(Buffer.from(deckCode, "base64").toString("binary")));
 
-    const $nCurrentByteIndex = [0];
-    const $nTotalBytes = deckByteArray.length;
+    const currentByteIndex = [0];
+    const deckByteArrayLength = deckByteArray.length;
     // check version num
-    const $nVersionAndHeroes = deckByteArray[$nCurrentByteIndex[0]++];
-    const $version = $nVersionAndHeroes >> 4;
+    const versionAndHeroes = deckByteArray[currentByteIndex[0]++];
+    const version = versionAndHeroes >> 4;
+    const checkSum = deckByteArray[1];
 
-    if (currentVersion !== $version && $version !== 1) { return false; }
+    if (currentVersion !== version && version !== 1) { return false; }
 
     // do checksum check
-    const $nChecksum = deckByteArray[$nCurrentByteIndex[0]++];
-    let $nStringLength = 0;
-    if ($version > 1) { $nStringLength = deckByteArray[$nCurrentByteIndex[0]++]; }
-    const $nTotalCardBytes = $nTotalBytes - $nStringLength;
+    const $nChecksum = deckByteArray[currentByteIndex[0]++];
+    let stringLength = 0;
+    if (version > 1) { stringLength = deckByteArray[currentByteIndex[0]++]; }
+    const totalCardBytes = deckByteArrayLength - stringLength;
     // grab the string size
     // {
-    let $nComputedChecksum = 0;
-    for (let $i = $nCurrentByteIndex[0]; $i < $nTotalCardBytes; $i++) { $nComputedChecksum += deckByteArray[$i]; }
-    const $masked = ($nComputedChecksum & 0xFF);
+    let calcCheckSum = 0;
+    for (let i = currentByteIndex[0]; i < totalCardBytes; i++) { calcCheckSum += deckByteArray[i]; }
+    calcCheckSum = (calcCheckSum & 0xFF);
     console.log(calcCheckSum);
     // comapre checksums
     return checkSum === calcCheckSum ? true : false;
