@@ -39,7 +39,7 @@ export class DiscordBot {
         });
 
         this.client.on("guildMemberAdd", (member: GuildMember) => {
-            // need to change below to not be so hard coded
+            // need to change this event logic to not be so hard coded
             SIGNALE.info(`New User ${chalk.blue(member.displayName)} has joined guild ${member.guild}`);
 
             const welcome = member.guild.channels.get("517033870785511425");
