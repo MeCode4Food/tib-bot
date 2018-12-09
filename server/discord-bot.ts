@@ -7,6 +7,7 @@ import SIGNALE from "signale";
 import * as _ from "lodash";
 import fs from "fs";
 import { isDeckCodeInMessage } from "./message_preparsers/deck_code_handler/helper/is_deck_code_in_message";
+import { welcomeID, rulesID, announcementsID, tourneyRulesID, TIBID } from "./helper/server_info/tib";
 
 export class DiscordBot {
     private client = new Discord.Client();
@@ -21,6 +22,7 @@ export class DiscordBot {
             this.initListeners();
             this.initENV();
             this.initCommands();
+            this.initTimedScripts();
         } catch (error) {
             SIGNALE.error(error);
             throw error;
@@ -42,10 +44,10 @@ export class DiscordBot {
             // need to change this event logic to not be so hard coded
             SIGNALE.info(`New User ${chalk.blue(member.displayName)} has joined guild ${member.guild}`);
 
-            const welcome = member.guild.channels.get("517033870785511425");
-            const rules = member.guild.channels.get("517061735639678977");
-            const announcements = member.guild.channels.get("512661992255782913");
-            const tourneyRules = member.guild.channels.get("517062872056987668");
+            const welcome = member.guild.channels.get(welcomeID);
+            const rules = member.guild.channels.get(rulesID);
+            const announcements = member.guild.channels.get(announcementsID);
+            const tourneyRules = member.guild.channels.get(tourneyRulesID);
 
             (member.guild.channels.get(this.newMembersChannel) as TextChannel).send(
                 `Welcome ${member.user}! Do check out ${welcome} channel for an introduction to the server.\n` +
@@ -78,7 +80,6 @@ export class DiscordBot {
         });
     }
 
-    // doesn't really initialize environmental variables
     private initENV(): void {
         if (_.isEmpty(this.prefix)) {
             throw new Error(`Please make sure .env is complete Prefix: ${this.prefix}`);
@@ -100,6 +101,13 @@ export class DiscordBot {
         const directory = "./server/commands";
 
         this.loadCommandsFromDirectory(directory);
+    }
+
+    private initTimedScripts(): any {
+        const hour = 1000 * 60 * 60;
+        setInterval(() => {
+            console.log(`Count: ${this.client.guilds.get(TIBID)!.memberCount} Online: ${this.client.guilds.get(TIBID)!.members.find((m) => m.presence.status === "online")}`);
+        }, 5000);
     }
 
     private loadCommandsFromDirectory(directory: string) {
