@@ -8,6 +8,10 @@ import * as _ from "lodash";
 import fs from "fs";
 import { isDeckCodeInMessage } from "./message_preparsers/deck_code_handler/helper/is_deck_code_in_message";
 import { welcomeID, rulesID, announcementsID, tourneyRulesID, TIBID } from "./helper/server_info/tib";
+import { clientOnReady } from "./helper/server_events/on_ready";
+import { clientOnGuildMemberAdd } from "./helper/server_events/on_guildMemberAdd";
+import { clientOnMessage } from "./helper/server_events/on_message";
+import { clientOnError } from "./helper/server_events/on_error";
 
 export class DiscordBot {
     private client = new Discord.Client();
@@ -15,7 +19,7 @@ export class DiscordBot {
     private token = "";
     private readonly prefix = process.env.COMMAND_PREFIX;
     private readonly deckCodePrefix = process.env.DECK_CODE_PREFIX;
-    private readonly newMembersChannel = "520417737063792661"; // only works for the tib server
+    private readonly newMembersChannelID = "520417737063792661"; // only works for the tib server
 
     constructor() {
         try {
@@ -35,51 +39,11 @@ export class DiscordBot {
     }
 
     private initListeners(): void {
-        this.client.on("ready", () => {
-            SIGNALE.success(chalk.green("Logged in!"));
-            this.client.user.setActivity("Artifact");
-        });
+        clientOnReady(this.client);
+        clientOnGuildMemberAdd(this.client, this.newMembersChannelID);
+        clientOnMessage(this.client, this.parseMessageHandleCommands);
 
-        this.client.on("guildMemberAdd", (member: GuildMember) => {
-            // need to change this event logic to not be so hard coded
-            SIGNALE.info(`New User ${chalk.blue(member.displayName)} has joined guild ${member.guild}`);
-
-            if (process.env.ENV_MODE === "PROD") {
-                const welcome = member.guild.channels.get(welcomeID);
-                const rules = member.guild.channels.get(rulesID);
-                const announcements = member.guild.channels.get(announcementsID);
-                const tourneyRules = member.guild.channels.get(tourneyRulesID);
-
-                (member.guild.channels.get(this.newMembersChannel) as TextChannel).send(
-                    `Welcome ${member.user}! Do check out ${welcome} channel for an introduction to the server.\n` +
-                    `A reminder to follow the ${rules}, and do check out our ${announcements}!\n\n` +
-                    `If you're here for the tournaments,\n` +
-                    `Check out ${tourneyRules} or more information on our tourneys!`
-                );
-            }
-        });
-
-        this.client.on("message", (message: Message) => {
-            // Log messages
-            console.log(chalk.green(message.author.username) + ":"
-            + chalk.cyan((message.channel as TextChannel).name) + ">" + chalk.blue(message.toString()));
-
-            this.parseMessageHandleCommands(message);
-
-        });
-
-        this.client.on("error", (error) => {
-            console.error("error message:");
-            SIGNALE.error(error.message);
-            console.error("error object:");
-            console.error(error);
-
-            if (error.message === "read ECONNRESET") {
-                this.start(this.token);
-            } else {
-                SIGNALE.info(`${chalk.red("ERROR MESSAGE")}: ${error.message}`);
-            }
-        });
+        clientOnError(this.client, this.start, this.token);
     }
 
     private initENV(): void {
@@ -154,7 +118,7 @@ export class DiscordBot {
                     // ignore errors here by using cast 'as any'.
                     (this.commands.get(commandName)! as any).execute(this as DiscordBot, message, args);
                 } catch (error) {
-                    console.log(error);
+                    SIGNALE.error(error);
                 }
             }
         } else if (isDeckCodeInMessage(message) && process.env.ENV_MODE === "PROD") {
