@@ -1,26 +1,23 @@
-import Discord, { TextChannel, GuildMember, Channel } from "discord.js";
+import Discord from "discord.js";
 import { Message } from "discord.js";
 import { ICommand } from "./commands/_command";
 import { handleDeckCodeMessage } from "./message_preparsers/deck_code_handler";
-import chalk from "chalk";
-import SIGNALE from "signale";
-import * as _ from "lodash";
-import fs from "fs";
 import { isDeckCodeInMessage } from "./message_preparsers/deck_code_handler/helper/is_deck_code_in_message";
-import { welcomeID, rulesID, announcementsID, tourneyRulesID, TIBID } from "./helper/server_info/tib";
+import { TIBID } from "./helper/server_info/tib";
 import { clientOnReady } from "./helper/server_events/on_ready";
 import { clientOnGuildMemberAdd } from "./helper/server_events/on_guildMemberAdd";
 import { clientOnMessage } from "./helper/server_events/on_message";
 import { clientOnError } from "./helper/server_events/on_error";
 import { clientOnPresenceUpdate } from "./helper/server_events/on_presenceUpdate";
+import SIGNALE from "signale";
+import * as _ from "lodash";
+import fs from "fs";
 
 export class DiscordBot {
     private client = new Discord.Client();
     private commands = new Discord.Collection();
     private token = "";
     private readonly prefix = process.env.COMMAND_PREFIX;
-    private readonly deckCodePrefix = process.env.DECK_CODE_PREFIX;
-    private readonly newMembersChannelID = "520417737063792661"; // only works for the tib server
 
     constructor() {
         try {
@@ -46,7 +43,7 @@ export class DiscordBot {
 
     private initListeners(): void {
         clientOnReady(this.client);
-        clientOnGuildMemberAdd(this.client, this.newMembersChannelID);
+        clientOnGuildMemberAdd(this.client);
         clientOnMessage(this.client, this.parseMessageHandleCommands);
         clientOnPresenceUpdate(this.client);
 
@@ -77,14 +74,13 @@ export class DiscordBot {
     }
 
     private initTimedScripts(): any {
-        const hour = 1000 * 60 * 60;
-        setInterval(() => {
-            console.log(
-                `Count: ${this.client.guilds.get(TIBID)!.memberCount} ` +
-                `Online: ${this.client.guilds.get(TIBID)!.members.filter((m) => m.presence.status === "online").size} ` +
-                `In Game: ${this.client.guilds.get(TIBID)!.members.filter((m) => (m.presence.game || {}).name === "Artifact").size}`
-            );
-        }, 5000);
+        // setInterval(() => {
+        //     console.log(
+        //         `Count: ${this.client.guilds.get(TIBID)!.memberCount} ` +
+        //         `Online: ${this.client.guilds.get(TIBID)!.members.filter((m) => m.presence.status === "online").size} ` +
+        //         `In Game: ${this.client.guilds.get(TIBID)!.members.filter((m) => (m.presence.game || {}).name === "Artifact").size}`
+        //     );
+        // }, 5000);
     }
 
     private loadCommandsFromDirectory(directory: string) {
