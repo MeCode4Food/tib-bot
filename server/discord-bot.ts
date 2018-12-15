@@ -12,6 +12,7 @@ import { clientOnReady } from "./helper/server_events/on_ready";
 import { clientOnGuildMemberAdd } from "./helper/server_events/on_guildMemberAdd";
 import { clientOnMessage } from "./helper/server_events/on_message";
 import { clientOnError } from "./helper/server_events/on_error";
+import { clientOnPresenceUpdate } from "./helper/server_events/on_presenceUpdate";
 
 export class DiscordBot {
     private client = new Discord.Client();
@@ -35,13 +36,19 @@ export class DiscordBot {
 
     public start(token: string): void {
         this.token = token;
-        this.client.login(token);
+        this.client.login(token)
+            .catch((error) => {
+                SIGNALE.error("Client start error");
+                SIGNALE.error(error);
+                this.start(this.token);
+            });
     }
 
     private initListeners(): void {
         clientOnReady(this.client);
         clientOnGuildMemberAdd(this.client, this.newMembersChannelID);
         clientOnMessage(this.client, this.parseMessageHandleCommands);
+        clientOnPresenceUpdate(this.client);
 
         clientOnError(this.client, this.start, this.token);
     }
