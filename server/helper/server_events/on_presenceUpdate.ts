@@ -1,7 +1,11 @@
+// tslint:disable:object-literal-sort-keys
 import { Client, User, GuildMember } from "discord.js";
 import chalk from "chalk";
 import SIGNALE from "signale";
 import _ from "lodash";
+import { axiosPostSecret } from "../../services/axios";
+
+const activityURL = `http://${process.env.DB_API_URL}:${process.env.DB_API_PORT}/user/activity`;
 
 export function clientOnPresenceUpdate(client: Client) {
   client.on("presenceUpdate", (oldUser: GuildMember, newUser: GuildMember) => {
@@ -18,17 +22,37 @@ function isUserOnline(guildUser: GuildMember) {
 }
 
 function onUserOnline(guildUser: GuildMember) {
-  SIGNALE.info(`User ${chalk.cyan(guildUser.user.username)} has come online`);
+  const activity = "user_online";
+  const userActivity = generateUserActivity(guildUser.user, activity);
+
+  axiosPostSecret(activityURL, userActivity);
 }
 
 function onUserOffline(guildUser: GuildMember) {
-  SIGNALE.info(`User ${chalk.cyan(guildUser.user.username)} has went offline`);
+  const activity = "user_offline";
+  const userActivity = generateUserActivity(guildUser.user, activity);
+
+  axiosPostSecret(activityURL, userActivity);
 }
 
 function onUserStartGame(guildUser: GuildMember) {
-  SIGNALE.info(`User ${chalk.cyan(guildUser.user.username)} has started game ${guildUser.presence.game.name}`);
+  const activity = "user_start_game";
+  const userActivity = generateUserActivity(guildUser.user, activity);
+
+  axiosPostSecret(activityURL, userActivity);
 }
 
 function onUserStopGame(guildUser: GuildMember) {
-  SIGNALE.info(`User ${chalk.cyan(guildUser.user.username)} has stopped game ${guildUser.presence.game.name}`);
+  const activity = "user_stop_game";
+  const userActivity = generateUserActivity(guildUser.user, activity);
+
+  axiosPostSecret(activityURL, userActivity);
+}
+
+function generateUserActivity(user: User, activity: string) {
+  return {
+    user_id: user.id,
+    date: (new Date()).toISOString(),
+    activity,
+  };
 }
