@@ -23,6 +23,8 @@ export default class Card {
   public passive_text: string;
   public parent_name: string;
   public parent_type: string;
+  public active_name: string;
+  public active_text: string;
 
   constructor(object: any) {
     this.card_id     = object.card_id;
@@ -44,6 +46,8 @@ export default class Card {
     this.signature_text = object.signature_text ? object.signature_text : null;
     this.passive_name = object.passive_name ? object.passive_name : null;
     this.passive_text = object.passive_text ? object.passive_text : null;
+    this.active_name = object.active_name ? object.active_name : null;
+    this.active_text = object.active_text ? object.active_text : null;
     this.parent_name = object.parent_name ? object.parent_name : null;
     this.parent_type = object.parent_type ? object.parent_type : null;
 
