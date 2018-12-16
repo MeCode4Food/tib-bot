@@ -9,7 +9,7 @@ export function clientOnPresenceUpdate(client: Client) {
     if (isUserOnline(oldUser) && newUser.presence.status === "offline") { onUserOffline(newUser); }
 
     if (_.get(oldUser, "presence.game.name") !== "Artifact" && _.get(newUser, "presence.game.name") === "Artifact") { onUserStartGame(newUser); } else
-    if (_.get(oldUser, "presence.game.name") === "Artifact" && _.get(newUser, "presence.game.name")  !== "Artifact") { onUserStopGame(newUser); }
+    if (_.get(oldUser, "presence.game.name") === "Artifact" && _.get(newUser, "presence.game.name")  !== "Artifact") { onUserStopGame(oldUser); }
   });
 }
 
