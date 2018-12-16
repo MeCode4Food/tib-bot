@@ -18,7 +18,7 @@ export function generateEmbedFromCard(card: Card): RichEmbed {
     if (card.mana_cost) { embed.addField("Mana Cost", card.mana_cost, true); }
     if (card.card_text && card.card_type !== "Hero") { embed.addField("Card Text", card.card_text); }
     if (card.signature_name) { embed.addField("Signature Card", card.signature_name); }
-    if (card.passive_name) { embed.addField("Passive Ability", `**${card.passive_name}**: ${card.passive_text}`); }
+    if (card.passive_name) { embed.addField("Passive Ability", `**${card.active_name}**: ${card.active_text}`); }
     if (card.active_name && card.card_type === "Hero") { embed.addField("Active Ability", `**${card.passive_name}**: ${card.passive_text}`); }
     if (card.parent_type === "Hero") {
         if (card.card_type === "Ability") {
