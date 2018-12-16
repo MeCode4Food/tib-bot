@@ -44,7 +44,7 @@ export class DiscordBot {
     private initListeners(): void {
         clientOnReady(this.client);
         clientOnGuildMemberAdd(this.client);
-        clientOnMessage(this.client, this.parseMessageHandleCommands);
+        clientOnMessage(this.client, this.parseMessageHandleCommands.bind(this));
         clientOnPresenceUpdate(this.client);
 
         clientOnError(this.client, this.start, this.token);
