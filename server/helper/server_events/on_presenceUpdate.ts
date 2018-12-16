@@ -5,8 +5,6 @@ import SIGNALE from "signale";
 import _ from "lodash";
 import { axiosPostSecret } from "../../services/axios";
 
-const activityURL = `http://${process.env.DB_API_URL}:${process.env.DB_API_PORT}/user/activity`;
-
 export function clientOnPresenceUpdate(client: Client) {
   client.on("presenceUpdate", (oldUser: GuildMember, newUser: GuildMember) => {
     if (oldUser.presence.status === "offline" && isUserOnline(newUser)) { onUserOnline(newUser); } else
@@ -25,28 +23,28 @@ function onUserOnline(guildUser: GuildMember) {
   const activity = "user_online";
   const userActivity = generateUserActivity(guildUser.user, activity);
 
-  axiosPostSecret(activityURL, userActivity);
+  axiosPostSecret(getActivityURL(), userActivity);
 }
 
 function onUserOffline(guildUser: GuildMember) {
   const activity = "user_offline";
   const userActivity = generateUserActivity(guildUser.user, activity);
 
-  axiosPostSecret(activityURL, userActivity);
+  axiosPostSecret(getActivityURL(), userActivity);
 }
 
 function onUserStartGame(guildUser: GuildMember) {
   const activity = "user_start_game";
   const userActivity = generateUserActivity(guildUser.user, activity);
 
-  axiosPostSecret(activityURL, userActivity);
+  axiosPostSecret(getActivityURL(), userActivity);
 }
 
 function onUserStopGame(guildUser: GuildMember) {
   const activity = "user_stop_game";
   const userActivity = generateUserActivity(guildUser.user, activity);
 
-  axiosPostSecret(activityURL, userActivity);
+  axiosPostSecret(getActivityURL(), userActivity);
 }
 
 function generateUserActivity(user: User, activity: string) {
@@ -56,3 +54,6 @@ function generateUserActivity(user: User, activity: string) {
     activity,
   };
 }
+
+// made this into function to prevent assignment of string to be called before env files are initialized
+const getActivityURL = () => `http://${process.env.DB_API_URL}:${process.env.DB_API_PORT}/user/activity`;

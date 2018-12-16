@@ -21,8 +21,8 @@ export class DiscordBot {
 
     constructor() {
         try {
-            this.initListeners();
             this.initENV();
+            this.initListeners();
             this.initCommands();
             this.initTimedScripts();
         } catch (error) {
@@ -41,15 +41,6 @@ export class DiscordBot {
             });
     }
 
-    private initListeners(): void {
-        clientOnReady(this.client);
-        clientOnGuildMemberAdd(this.client);
-        clientOnMessage(this.client, this.parseMessageHandleCommands.bind(this));
-        clientOnPresenceUpdate(this.client);
-
-        clientOnError(this.client, this.start, this.token);
-    }
-
     private initENV(): void {
         if (_.isEmpty(this.prefix)) {
             throw new Error(`Please make sure .env is complete Prefix: ${this.prefix}`);
@@ -64,6 +55,15 @@ export class DiscordBot {
         } else {
             throw new Error(`Please check your ENV_MODE`);
         }
+    }
+
+    private initListeners(): void {
+        clientOnReady(this.client);
+        clientOnGuildMemberAdd(this.client);
+        clientOnMessage(this.client, this.parseMessageHandleCommands.bind(this));
+        clientOnPresenceUpdate(this.client);
+
+        clientOnError(this.client, this.start, this.token);
     }
 
     private initCommands(): void {
