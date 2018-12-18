@@ -53,7 +53,7 @@ export default class Card {
 
     // card stats
     this.attack = object.attack;
-    this.armour = object.armor;
+    this.armour = object.armour;
     this.hit_points = object.hit_points;
     this.mana_cost = object.mana_cost;
     this.gold_cost = object.gold_cost;
