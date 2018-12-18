@@ -1,26 +1,28 @@
-import Discord, { TextChannel, GuildMember, Channel } from "discord.js";
+import Discord from "discord.js";
 import { Message } from "discord.js";
 import { ICommand } from "./commands/_command";
 import { handleDeckCodeMessage } from "./message_preparsers/deck_code_handler";
-import chalk from "chalk";
+import { isDeckCodeInMessage } from "./message_preparsers/deck_code_handler/helper/is_deck_code_in_message";
+import { TIBID } from "./helper/server_info/tib";
+import { clientOnReady } from "./helper/server_events/on_ready";
+import { clientOnGuildMemberAdd } from "./helper/server_events/on_guildMemberAdd";
+import { clientOnMessage } from "./helper/server_events/on_message";
+import { clientOnError } from "./helper/server_events/on_error";
+import { clientOnPresenceUpdate } from "./helper/server_events/on_presenceUpdate";
 import SIGNALE from "signale";
 import * as _ from "lodash";
 import fs from "fs";
-import { isDeckCodeInMessage } from "./message_preparsers/deck_code_handler/helper/is_deck_code_in_message";
-import { welcomeID, rulesID, announcementsID, tourneyRulesID, TIBID } from "./helper/server_info/tib";
 
 export class DiscordBot {
     private client = new Discord.Client();
     private commands = new Discord.Collection();
     private token = "";
     private readonly prefix = process.env.COMMAND_PREFIX;
-    private readonly deckCodePrefix = process.env.DECK_CODE_PREFIX;
-    private readonly newMembersChannel = "520417737063792661"; // only works for the tib server
 
     constructor() {
         try {
-            this.initListeners();
             this.initENV();
+            this.initListeners();
             this.initCommands();
             this.initTimedScripts();
         } catch (error) {
@@ -31,55 +33,12 @@ export class DiscordBot {
 
     public start(token: string): void {
         this.token = token;
-        this.client.login(token);
-    }
-
-    private initListeners(): void {
-        this.client.on("ready", () => {
-            SIGNALE.success(chalk.green("Logged in!"));
-            this.client.user.setActivity("Artifact");
-        });
-
-        this.client.on("guildMemberAdd", (member: GuildMember) => {
-            // need to change this event logic to not be so hard coded
-            SIGNALE.info(`New User ${chalk.blue(member.displayName)} has joined guild ${member.guild}`);
-
-            if (process.env.ENV_MODE === "PROD") {
-                const welcome = member.guild.channels.get(welcomeID);
-                const rules = member.guild.channels.get(rulesID);
-                const announcements = member.guild.channels.get(announcementsID);
-                const tourneyRules = member.guild.channels.get(tourneyRulesID);
-
-                (member.guild.channels.get(this.newMembersChannel) as TextChannel).send(
-                    `Welcome ${member.user}! Do check out ${welcome} channel for an introduction to the server.\n` +
-                    `A reminder to follow the ${rules}, and do check out our ${announcements}!\n\n` +
-                    `If you're here for the tournaments,\n` +
-                    `Check out ${tourneyRules} or more information on our tourneys!`
-                );
-            }
-        });
-
-        this.client.on("message", (message: Message) => {
-            // Log messages
-            console.log(chalk.green(message.author.username) + ":"
-            + chalk.cyan((message.channel as TextChannel).name) + ">" + chalk.blue(message.toString()));
-
-            this.parseMessageHandleCommands(message);
-
-        });
-
-        this.client.on("error", (error) => {
-            console.error("error message:");
-            SIGNALE.error(error.message);
-            console.error("error object:");
-            console.error(error);
-
-            if (error.message === "read ECONNRESET") {
+        this.client.login(token)
+            .catch((error) => {
+                SIGNALE.error("Client start error");
+                SIGNALE.error(error);
                 this.start(this.token);
-            } else {
-                SIGNALE.info(`${chalk.red("ERROR MESSAGE")}: ${error.message}`);
-            }
-        });
+            });
     }
 
     private initENV(): void {
@@ -98,6 +57,15 @@ export class DiscordBot {
         }
     }
 
+    private initListeners(): void {
+        clientOnReady(this.client);
+        clientOnGuildMemberAdd(this.client);
+        clientOnMessage(this.client, this.parseMessageHandleCommands.bind(this));
+        clientOnPresenceUpdate(this.client);
+
+        clientOnError(this.client, this.start, this.token);
+    }
+
     private initCommands(): void {
         // read all folders inside ./server/commands
         const directory = "./server/commands";
@@ -106,14 +74,13 @@ export class DiscordBot {
     }
 
     private initTimedScripts(): any {
-        const hour = 1000 * 60 * 60;
-        setInterval(() => {
-            console.log(
-                `Count: ${this.client.guilds.get(TIBID)!.memberCount} ` +
-                `Online: ${this.client.guilds.get(TIBID)!.members.filter((m) => m.presence.status === "online").size} ` +
-                `In Game: ${this.client.guilds.get(TIBID)!.members.filter((m) => (m.presence.game || {}).name === "Artifact").size}`
-            );
-        }, 5000);
+        // setInterval(() => {
+        //     console.log(
+        //         `Count: ${this.client.guilds.get(TIBID)!.memberCount} ` +
+        //         `Online: ${this.client.guilds.get(TIBID)!.members.filter((m) => m.presence.status === "online").size} ` +
+        //         `In Game: ${this.client.guilds.get(TIBID)!.members.filter((m) => (m.presence.game || {}).name === "Artifact").size}`
+        //     );
+        // }, 5000);
     }
 
     private loadCommandsFromDirectory(directory: string) {
@@ -154,7 +121,7 @@ export class DiscordBot {
                     // ignore errors here by using cast 'as any'.
                     (this.commands.get(commandName)! as any).execute(this as DiscordBot, message, args);
                 } catch (error) {
-                    console.log(error);
+                    SIGNALE.error(error);
                 }
             }
         } else if (isDeckCodeInMessage(message) && process.env.ENV_MODE === "PROD") {
