@@ -76,7 +76,7 @@ function generateCardsField(deck: Deck, emojiObject: Map<string, Emoji>): string
     }
   });
 
-  if (textToAdd) { cardsOutput.push(textToAdd); }
+  cardsOutput.push(currentText);
 
   console.log(cardsOutput);
   console.log(cardsOutput.map((x) => x.length));
