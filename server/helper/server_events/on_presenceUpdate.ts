@@ -7,11 +7,13 @@ import { axiosPostSecret } from "../../services/axios";
 
 export function clientOnPresenceUpdate(client: Client) {
   client.on("presenceUpdate", (oldUser: GuildMember, newUser: GuildMember) => {
-    if (oldUser.presence.status === "offline" && isUserOnline(newUser)) { onUserOnline(newUser); } else
-    if (isUserOnline(oldUser) && newUser.presence.status === "offline") { onUserOffline(newUser); }
+    if (process.env.ENV_MODE === "PROD") {
+      if (oldUser.presence.status === "offline" && isUserOnline(newUser)) { onUserOnline(newUser); } else
+      if (isUserOnline(oldUser) && newUser.presence.status === "offline") { onUserOffline(newUser); }
 
-    if (_.get(oldUser, "presence.game.name") !== "Artifact" && _.get(newUser, "presence.game.name") === "Artifact") { onUserStartGame(newUser); } else
-    if (_.get(oldUser, "presence.game.name") === "Artifact" && _.get(newUser, "presence.game.name")  !== "Artifact") { onUserStopGame(oldUser); }
+      if (_.get(oldUser, "presence.game.name") !== "Artifact" && _.get(newUser, "presence.game.name") === "Artifact") { onUserStartGame(newUser); } else
+      if (_.get(oldUser, "presence.game.name") === "Artifact" && _.get(newUser, "presence.game.name")  !== "Artifact") { onUserStopGame(oldUser); }
+    }
   });
 }
 
