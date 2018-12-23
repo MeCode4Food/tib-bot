@@ -3,6 +3,7 @@ import { Message } from "discord.js";
 import { ICommand } from "./commands/_command";
 import { handleDeckCodeMessage } from "./message_preparsers/deck_code_handler";
 import { isDeckCodeInMessage } from "./message_preparsers/deck_code_handler/helper/is_deck_code_in_message";
+import { TIBID, botSpamDevID } from "./helper/server_info/variables";
 import { clientOnReady } from "./helper/server_events/on_ready";
 import { clientOnGuildMemberAdd } from "./helper/server_events/on_guildMemberAdd";
 import { clientOnMessage } from "./helper/server_events/on_message";
@@ -131,7 +132,10 @@ export class DiscordBot {
                     SIGNALE.error(error);
                 }
             }
-        } else if (isDeckCodeInMessage(message) && process.env.ENV_MODE === "PROD") {
+        } else if (
+            isDeckCodeInMessage(message)
+            && (process.env.ENV_MODE === "PROD" || message.channel.id === botSpamDevID)
+            ) {
             // decode deck code
             handleDeckCodeMessage(this.client, message);
         }
