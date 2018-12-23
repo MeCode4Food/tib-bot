@@ -3,7 +3,7 @@ import { Message } from "discord.js";
 import { ICommand } from "./commands/_command";
 import { handleDeckCodeMessage } from "./message_preparsers/deck_code_handler";
 import { isDeckCodeInMessage } from "./message_preparsers/deck_code_handler/helper/is_deck_code_in_message";
-import { TIBID } from "./helper/server_info/tib";
+import { TIBID, botSpamDevID } from "./helper/server_info/variables";
 import { clientOnReady } from "./helper/server_events/on_ready";
 import { clientOnGuildMemberAdd } from "./helper/server_events/on_guildMemberAdd";
 import { clientOnMessage } from "./helper/server_events/on_message";
@@ -12,6 +12,7 @@ import { clientOnPresenceUpdate } from "./helper/server_events/on_presenceUpdate
 import SIGNALE from "signale";
 import * as _ from "lodash";
 import fs from "fs";
+import { recordHourlyActivity } from "./helper/timed_scripts/timed_scripts";
 
 export class DiscordBot {
     private client = new Discord.Client();
@@ -24,7 +25,6 @@ export class DiscordBot {
             this.initENV();
             this.initListeners();
             this.initCommands();
-            this.initTimedScripts();
         } catch (error) {
             SIGNALE.error(error);
             throw error;
@@ -38,7 +38,14 @@ export class DiscordBot {
                 SIGNALE.error("Client start error");
                 SIGNALE.error(error);
                 this.start(this.token);
+            })
+            .then(() => {
+                this.botHasStart(); // handle things that should be done after bot has started
             });
+    }
+
+    private botHasStart() {
+        this.initTimedScripts();
     }
 
     private initENV(): void {
@@ -74,6 +81,7 @@ export class DiscordBot {
     }
 
     private initTimedScripts(): any {
+        recordHourlyActivity(this.client);
         // setInterval(() => {
         //     console.log(
         //         `Count: ${this.client.guilds.get(TIBID)!.memberCount} ` +
@@ -124,7 +132,10 @@ export class DiscordBot {
                     SIGNALE.error(error);
                 }
             }
-        } else if (isDeckCodeInMessage(message) && process.env.ENV_MODE === "PROD") {
+        } else if (
+            isDeckCodeInMessage(message)
+            && (process.env.ENV_MODE === "PROD" || message.channel.id === botSpamDevID)
+            ) {
             // decode deck code
             handleDeckCodeMessage(this.client, message);
         }

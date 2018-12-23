@@ -1,7 +1,7 @@
 import { Client, TextChannel, GuildMember } from "discord.js";
 import chalk from "chalk";
 import SIGNALE from "signale";
-import { aboutUsID, rulesID, announcementsID, tourneyRulesID, welcomeID } from "../server_info/tib";
+import { aboutUsID, rulesID, announcementsID, tourneyRulesID, welcomeID } from "../server_info/variables";
 
 export function clientOnGuildMemberAdd(client: Client) {
   client.on("guildMemberAdd", (member: GuildMember) => {

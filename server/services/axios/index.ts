@@ -8,7 +8,9 @@ export async function axiosGet(url: string, params?: AxiosRequestConfig): Promis
 }
 
 export async function axiosPostSecret(url: string, body: any): Promise<any> {
-  console.log(chalk.green("POST:") + chalk.cyan(url) + "  " + _.truncate(JSON.stringify(body)));
   body.secret = process.env.DB_API_SECRET;
-  return await axios.post(url, body);
+
+  return await axios.post(url, body).then((response) => {
+    console.log(chalk.green(`POST:${response.status} `) + chalk.cyan(url) + "  " + _.truncate(JSON.stringify(body)));
+  });
 }
