@@ -23,8 +23,7 @@ function generateHourlyActivity(client: Client) {
   const totalUsers = client.guilds.get(TIBID)!.memberCount;
 
   return {
-    date: todayDate,
-    hour: thisHour,
+    timestamp: now,
     online: usersOnline,
     in_game: inGame,
     total: totalUsers
