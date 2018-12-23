@@ -6,4 +6,4 @@ export const announcementsID = "512661992255782913";
 export const tourneyRulesID = "517062872056987668";
 export const botSpamDevID = "498172651123245057";
 
-export const hourlyActvitiyCronString = "* * */1 * * *";
+export const hourlyActvitiyCronString = "0 0 */1 * * *";
