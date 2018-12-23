@@ -6,6 +6,7 @@ import { axiosPostSecret } from "../../services/axios";
 
 export function recordHourlyActivity(client: Client) {
   const a = new CronJob(hourlyActvitiyCronString, () => {
+    console.log(`cron job at ${new Date()}`);
     axiosPostSecret(getHourlyActivityURL(), generateHourlyActivity(client));
   });
 
