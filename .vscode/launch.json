@@ -14,15 +14,14 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug TypeScript in Node.js",
-      "preLaunchTask": "typescript",
-      "runtimeExecutable":"nodemon",
-      "program": "${workspaceFolder}/index.ts",
+      "name": "Launch via NPM",
+      "runtimeExecutable": "npm",
       "cwd": "${workspaceFolder}",
-      "protocol": "inspector",
-      "outFiles": [
-        "${workspaceFolder}/**/*.js"
-      ]
+      "runtimeArgs": [
+        "run-script",
+        "dev"
+      ],
+      "port": 9229
     }
   ]
 }
