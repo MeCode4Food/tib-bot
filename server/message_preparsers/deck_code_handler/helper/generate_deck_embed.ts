@@ -66,8 +66,9 @@ function generateCardsField(deck: Deck, emojiObject: Map<string, Emoji>): string
 
   _.forEach(cards, (card) => {
     const lengthBefore = currentText.length;
+    const formattedCardName = card.parent_type === "Hero" ? `*${card.card_name}` : card.card_name;
 
-    textToAdd = `${card.count}× ${emojiObject.get(card.colour)} **${card.mana_cost}** ${card.card_name}\n`;
+    textToAdd = `${card.count}× ${emojiObject.get(card.colour)} **${card.mana_cost}** ${formattedCardName}\n`;
     if (lengthBefore + textToAdd.length > limit) {
       cardsOutput.push(currentText);
       currentText = textToAdd;
