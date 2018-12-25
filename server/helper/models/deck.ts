@@ -70,6 +70,8 @@ class CardStack {
     public rarity: string;
     public signature_id: number | null;
     public parent_id: number | null;
+    public parent_name: string | null;
+    public parent_type: string | null;
     public passive_id: number | null;
     public active_id: number | null;
     public reference_id: number | null;
@@ -90,6 +92,8 @@ class CardStack {
         this.rarity = object.rarity;
         this.signature_id = object.signature_id ? object.signature_id : null;
         this.parent_id = object.parent_id ? object.parent_id : null;
+        this.parent_name = object.parent_name ? object.parent_name : null;
+        this.parent_type = object.parent_type ? object.parent_type : null;
         this.passive_id = object.passive_id ? object.passive_id : null;
         this.active_id = object.active_id ? object.active_id : null;
         this.reference_id = object.reference_id ? object.reference_id : null;
