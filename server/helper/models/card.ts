@@ -17,6 +17,7 @@ export default class Card {
   public hit_points: number;
   public mana_cost: number;
   public gold_cost: number;
+  public charges: number;
   public signature_name: string;
   public signature_text: string;
   public passive_name: string;
@@ -57,5 +58,6 @@ export default class Card {
     this.hit_points = object.hit_points;
     this.mana_cost = object.mana_cost;
     this.gold_cost = object.gold_cost;
+    this.charges = object.charges;
   }
 }
