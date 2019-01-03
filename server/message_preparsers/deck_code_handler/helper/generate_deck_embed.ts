@@ -93,7 +93,7 @@ function generateItemsField(deck: Deck, emojiObject: Map<string, Emoji>): string
   // Track ×3
 
   _.forEach(items, (item) => {
-    itemsOutput = itemsOutput + `${item.count}× ${item.card_name}\n`;
+    itemsOutput = itemsOutput + `${item.count}× **${item.gold_cost}** ${item.card_name}\n`;
   });
   return itemsOutput;
 }
