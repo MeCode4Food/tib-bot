@@ -16,10 +16,15 @@ export function generateEmbedFromCard(card: Card): RichEmbed {
     // if (card.armour) { embed.addField("Armor", card.armour, true); }
     // if (card.hit_points) { embed.addField("Health", card.hit_points, true); }
     if (card.mana_cost) { embed.addField("Mana Cost", card.mana_cost, true); }
+    if (card.gold_cost) { embed.addField("Gold Cost", card.gold_cost, true); }
+    if (card.charges) { embed.addField("Charges", card.charges, true); }
     if (card.card_text && card.card_type !== "Hero") { embed.addField("Card Text", card.card_text); }
     if (card.signature_name) { embed.addField("Signature Card", card.signature_name); }
     if (card.passive_name) { embed.addField("Passive Ability", `**${card.passive_name}**: ${card.passive_text}`); }
-    if (card.active_name && card.card_type === "Hero") { embed.addField("Active Ability", `**${card.active_name}**: ${card.active_text}`); }
+    if (card.active_name && card.card_type === "Hero") {
+        // embed.addField("Active Ability", `**${card.active_name}**: ${card.active_text}`);
+        embed.addField("Active Ability", `${card.card_text}`);
+    }
     if (card.parent_type === "Hero") {
         if (card.card_type === "Ability") {
             embed.addField("Active Ability for ", `${card.parent_name}`, true);

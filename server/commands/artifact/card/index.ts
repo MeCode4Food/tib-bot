@@ -16,6 +16,7 @@ export default class CardCommand extends ArtifactCommand {
         super();
         this.name = "card"; // command name that comes after the prefix
         this.description = `Search for cards *e.g. ${process.env.COMMAND_PREFIX}${this.name} Axe*`; // description of the example command
+        this.description += `\n*special note: paste deckcode or decklist URL to get full decklist`; // special note for decklist
     }
 
     public async execute(discordBot: DiscordBot, message: Message, args: string[]): Promise<void> {
