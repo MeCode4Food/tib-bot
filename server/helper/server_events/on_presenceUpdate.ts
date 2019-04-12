@@ -7,7 +7,7 @@ import { axiosPostSecret } from "../../services/axios";
 
 export function clientOnPresenceUpdate(client: Client) {
   client.on("presenceUpdate", (oldUser: GuildMember, newUser: GuildMember) => {
-    if (process.env.ENV_MODE === "PROD") {
+    if (process.env.ENV_MODE === "PROD" && process.env.TRACK_ANALYTICS === "1") {
       if (oldUser.presence.status === "offline" && isUserOnline(newUser)) { onUserOnline(newUser); } else
       if (isUserOnline(oldUser) && newUser.presence.status === "offline") { onUserOffline(newUser); }
 
