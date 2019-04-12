@@ -6,6 +6,7 @@ import { axiosPostSecret } from "../../services/axios";
 
 export function recordHourlyActivity(client: Client) {
   const a = new CronJob(hourlyActvitiyCronString, () => {
+    console.log(`cron job at ${new Date()}`);
     axiosPostSecret(getHourlyActivityURL(), generateHourlyActivity(client));
   });
 
@@ -22,8 +23,7 @@ function generateHourlyActivity(client: Client) {
   const totalUsers = client.guilds.get(TIBID)!.memberCount;
 
   return {
-    date: todayDate,
-    hour: thisHour,
+    timestamp: now,
     online: usersOnline,
     in_game: inGame,
     total: totalUsers
