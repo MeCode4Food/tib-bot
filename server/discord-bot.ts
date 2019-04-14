@@ -45,7 +45,7 @@ export class DiscordBot {
     }
 
     private botHasStart() {
-        this.initTimedScripts();
+        if (process.env.TRACK_ANALYTICS === "1") { this.initTimedScripts(); }
     }
 
     private initENV(): void {
